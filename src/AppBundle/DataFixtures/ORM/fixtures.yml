@@ -1,0 +1,12 @@
+AppBundle\Entity\User:
+    user0:
+        login: admin
+        email: admin@onet.pl
+        plainPassword: admin
+        roles: ['ROLE_USER']
+    user1:
+            login: admin2
+            email: admin2@onet.pl
+            plainPassword: admin
+            roles: ['ROLE_USER', 'ROLE_ADMIN']
+
