@@ -41,7 +41,7 @@ class Observation
     private $createdAt;
 
     /**
-     * @ORM\Column(type="date")
+     * @ORM\Column(type="datetime")
      */
     private $observationDate;
 
@@ -73,7 +73,9 @@ class Observation
     public function __construct()
     {
         $this->createdAt = new \DateTime();
+        $this->observationDate = new \DateTime();
         $this->comments = new ArrayCollection();
+
     }
 
     /**
