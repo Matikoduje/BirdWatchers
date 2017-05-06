@@ -4,9 +4,14 @@ AppBundle\Entity\User:
         email: admin@onet.pl
         plainPassword: admin
         roles: ['ROLE_USER']
+        is_baned: 0
+        user_profile: 2
     user1:
-            login: admin2
-            email: admin2@onet.pl
-            plainPassword: admin
-            roles: ['ROLE_USER', 'ROLE_ADMIN']
+        login: admin2
+        email: admin2@onet.pl
+        plainPassword: admin
+        roles: ['ROLE_USER', 'ROLE_ADMIN']
+        is_baned: 1
+        user_profile: 3
+
 

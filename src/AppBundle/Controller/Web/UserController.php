@@ -3,6 +3,7 @@
 namespace AppBundle\Controller\Web;
 
 use AppBundle\Entity\User;
+use AppBundle\Entity\UserProfile;
 use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -23,10 +24,9 @@ class UserController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             $em = $this->getDoctrine()->getManager();
-//            $userProfile = new UserProfil();
-//            $em->persist($userProfile);
-//            $em->flush();
-//            $post->setProfilId($userProfile->getId());
+            $userProfile = new UserProfile();
+            $em->persist($userProfile);
+            $post->setUserProfile($userProfile);
             $em->persist($post);
             $em->flush();
 

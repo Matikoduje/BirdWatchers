@@ -2,10 +2,9 @@
 
 namespace AppBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Security\Core\Role\Role;
 use Symfony\Component\Security\Core\User\UserInterface;
-use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 
@@ -33,6 +32,11 @@ class User implements UserInterface
      */
     private $plainPassword;
 
+    /**
+     * @ORM\OneToOne(targetEntity="UserProfile")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userProfile;
 
     /**
      * @var string
@@ -43,7 +47,7 @@ class User implements UserInterface
 
     /**
      * @var string
-     *     * @ORM\Column(name="email", type="string", length=50, unique=true)
+     * @ORM\Column(name="email", type="string", length=50, unique=true)
      */
     private $email;
 
@@ -55,31 +59,37 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\Column(type="json_array")
+     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user")
+     */
+    private $comments;
+
+    /**
+     * @ORM\OneToMany(targetEntity="Observation", mappedBy="user")
+     */
+    private $observations;
+
+    /**
+     * @ORM\Column(name="roles", type="json_array")
      */
     private $roles;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(name="is_baned", type="boolean")
      */
     private $isBaned;
 
     /**
-     * @ORM\Column(type="integer", unique=true)
-     * @ORM\OneToOne(targetEntity="UserProfile")
-     * @ORM\JoinColumn(name="userProfile", referencedColumnName="id")
+     * @ORM\Column(name="created_at", type="datetime")
      */
-    private $userProfile;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
-    private $createAccountDate;
+    private $createdAt;
 
     public function __construct()
     {
         $this->roles[] = 'ROLE_USER';
         $this->isBaned = 0;
+        $this->createdAt = new \DateTime();
+        $this->comments = new ArrayCollection();
+        $this->observations = new ArrayCollection();
     }
 
     /**
@@ -150,6 +160,7 @@ class User implements UserInterface
     public function setPassword($password)
     {
         $this->password = $password;
+        return $this;
     }
 
     /**
@@ -234,39 +245,15 @@ class User implements UserInterface
     }
 
     /**
-     * Set userProfile
-     *
-     * @param integer $userProfile
-     *
-     * @return User
-     */
-    public function setUserProfile($userProfile)
-    {
-        $this->userProfile = $userProfile;
-
-        return $this;
-    }
-
-    /**
-     * Get userProfile
-     *
-     * @return integer
-     */
-    public function getUserProfile()
-    {
-        return $this->userProfile;
-    }
-
-    /**
      * Set createAccountDate
      *
      * @param \DateTime $createAccountDate
      *
      * @return User
      */
-    public function setCreateAccountDate($createAccountDate)
+    public function setCreatedAt($createdAt)
     {
-        $this->createAccountDate = $createAccountDate;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -276,8 +263,101 @@ class User implements UserInterface
      *
      * @return \DateTime
      */
-    public function getCreateAccountDate()
+    public function getCreatedAt()
     {
-        return $this->createAccountDate;
+        return $this->createdAt;
+    }
+
+
+    /**
+     * Set userProfile
+     *
+     * @param \AppBundle\Entity\UserProfile $userProfile
+     *
+     * @return User
+     */
+    public function setUserProfile(\AppBundle\Entity\UserProfile $userProfile)
+    {
+        $this->userProfile = $userProfile;
+
+        return $this;
+    }
+
+    /**
+     * Get userProfile
+     *
+     * @return \AppBundle\Entity\UserProfile
+     */
+    public function getUserProfile()
+    {
+        return $this->userProfile;
+    }
+
+    /**
+     * Add comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     *
+     * @return User
+     */
+    public function addComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments[] = $comment;
+
+        return $this;
+    }
+
+    /**
+     * Remove comment
+     *
+     * @param \AppBundle\Entity\Comment $comment
+     */
+    public function removeComment(\AppBundle\Entity\Comment $comment)
+    {
+        $this->comments->removeElement($comment);
+    }
+
+    /**
+     * Get comments
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getComments()
+    {
+        return $this->comments;
+    }
+
+    /**
+     * Add observation
+     *
+     * @param \AppBundle\Entity\Observation $observation
+     *
+     * @return User
+     */
+    public function addObservation(\AppBundle\Entity\Observation $observation)
+    {
+        $this->observations[] = $observation;
+
+        return $this;
+    }
+
+    /**
+     * Remove observation
+     *
+     * @param \AppBundle\Entity\Observation $observation
+     */
+    public function removeObservation(\AppBundle\Entity\Observation $observation)
+    {
+        $this->observations->removeElement($observation);
+    }
+
+    /**
+     * Get observations
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getObservations()
+    {
+        return $this->observations;
     }
 }
