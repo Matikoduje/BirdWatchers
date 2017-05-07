@@ -1,20 +1,11 @@
 <?php
 
+include 'ApiTestCase.php';
 
-namespace tests\AppBundle\Controller\Api;
-use Symfony\Bundle\FrameworkBundle\Tests\TestCase;
-
-class ObservationControllerTest extends TestCase
+class ObservationControllerTest extends \tests\AppBundle\Controller\Api\ApiTestCase
 {
     public function testPOST()
     {
-        $client = new \GuzzleHttp\Client([
-            'base_url' => 'http://localhost:8000',
-            'defaults' => [
-                'exceptions' => false
-            ]
-        ]);
-
         $data = array(
             'location' => 'Dębieńsko',
             'state' => 'Śląskie',
@@ -23,13 +14,15 @@ class ObservationControllerTest extends TestCase
             'description' => 'Opis'
         );
 
-        $response = $client->post('/api/observation', [
+        $response = $this->client->post('/api/observation', [
             'body' => json_encode($data)
         ]);
 
         $this->assertEquals(201, $response->getStatusCode());
         $this->assertTrue($response->hasHeader('Location'));
+        //$this->assertEquals('/api/observation/ObjectOrienter', $response->getHeader('Location'));
         $finishedData = json_decode($response->getBody(true), true);
         $this->assertArrayHasKey('userName', $finishedData);
+        //$this->assertEquals('ObjectOrienter', $finishedData['id']);
     }
 }

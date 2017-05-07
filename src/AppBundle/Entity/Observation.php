@@ -56,9 +56,14 @@ class Observation
     private $state;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="decimal", precision=6, scale=4)
      */
-    private $coordinates;
+    private $latitude;
+
+    /**
+     * @ORM\Column(type="decimal", precision=6, scale=4)
+     */
+    private $longitude;
 
     /**
      * @ORM\Column(type="string")
@@ -103,11 +108,35 @@ class Observation
     }
 
     /**
-     * @param mixed $coordinates
+     * @return mixed
      */
-    public function setCoordinates($coordinates)
+    public function getLatitude()
     {
-        $this->coordinates = $coordinates;
+        return $this->latitude;
+    }
+
+    /**
+     * @param mixed $latitude
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param mixed $longitude
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
     }
 
     /**
@@ -214,16 +243,6 @@ class Observation
     public function getState()
     {
         return $this->state;
-    }
-
-    /**
-     * Get coordinates
-     *
-     * @return string
-     */
-    public function getCoordinates()
-    {
-        return $this->coordinates;
     }
 
     /**

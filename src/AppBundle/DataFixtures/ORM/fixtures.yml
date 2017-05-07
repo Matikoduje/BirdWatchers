@@ -1,3 +1,5 @@
+AppBundle\Entity\UserProfile:
+    userProfile0:
 AppBundle\Entity\User:
     user0:
         login: admin
@@ -5,13 +7,42 @@ AppBundle\Entity\User:
         plainPassword: admin
         roles: ['ROLE_USER']
         is_baned: 0
-        user_profile: 2
-    user1:
-        login: admin2
-        email: admin2@onet.pl
-        plainPassword: admin
-        roles: ['ROLE_USER', 'ROLE_ADMIN']
-        is_baned: 1
-        user_profile: 3
+        user_profile: '@userProfile0'
+AppBundle\Entity\Species:
+    species0:
+        speciesOrder: Ciconiformes
+        description: Bociek
+        image: Dada
+        name: Bocian Bialy
+        latinName: Ciconia Ciconia
+        family: Ciconidae
+AppBundle\Entity\Observation:
+    observation1:
+        user: '@user0'
+        species: '@species0'
+        location: Katowice
+        state: Slaskie
+        latitude: 50.1500
+        longitude: 19.0000
+        description: Zaobserwowalem Bocka
+        images: Brak
+    observation2:
+        user: '@user0'
+        species: '@species0'
+        location: Katowice
+        state: Slaskie
+        latitude: 50.1600
+        longitude: 19.1000
+        description: Zaobserwowalem Bocka
+        images: Brak
+    observation3:
+        user: '@user0'
+        species: '@species0'
+        location: Katowice
+        state: Slaskie
+        latitude: 50.1400
+        longitude: 19.2000
+        description: Zaobserwowalem Bocka
+        images: Brak
 
 

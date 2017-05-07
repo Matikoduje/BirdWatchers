@@ -41,7 +41,7 @@ class Species
     /**
      * @ORM\Column(type="string")
      */
-    private $order;
+    private $speciesOrder;
 
     /**
      * @ORM\Column(type="string")
@@ -136,27 +136,19 @@ class Species
     }
 
     /**
-     * Set order
-     *
-     * @param string $order
-     *
-     * @return Species
+     * @return mixed
      */
-    public function setOrder($order)
+    public function getSpeciesOrder()
     {
-        $this->order = $order;
-
-        return $this;
+        return $this->speciesOrder;
     }
 
     /**
-     * Get order
-     *
-     * @return string
+     * @param mixed $speciesOrder
      */
-    public function getOrder()
+    public function setSpeciesOrder($speciesOrder)
     {
-        return $this->order;
+        $this->speciesOrder = $speciesOrder;
     }
 
     /**

@@ -11,7 +11,10 @@ namespace AppBundle\Form;
 
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ButtonType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -24,7 +27,7 @@ class ObservationType extends AbstractType
             ->add('species', EntityType::class, array(
                 'class' => 'AppBundle\Entity\Species',
                 'choice_label' => 'name',
-                'label' => 'Wybierz gatunek'
+                'label' => 'Wybierz gatunek:'
             ))
 //            ->add('observationDate', DateType::class, array(
 //                'widget' => 'choice',
@@ -35,14 +38,20 @@ class ObservationType extends AbstractType
             ->add('state', TextType::class, array(
                 'label' => 'Województwo'
             ))
-            ->add('coordinates', TextType::class, array(
-                'label' => 'Współrzędne'
+            ->add('latitude', NumberType::class, array(
+                'label' => 'Szerokość geograficzna'
+            ))
+            ->add('longitude', NumberType::class, array(
+                'label' => 'Długość geograficzna'
             ))
             ->add('description', TextType::class, array(
                 'label' => 'Opis'
             ))
             ->add('images', TextType::class, array(
                 'label' => 'Zdjęcie'
+            ))
+            ->add('save', ButtonType::class, array(
+                'label' => 'Zapisz'
             ));
     }
 
