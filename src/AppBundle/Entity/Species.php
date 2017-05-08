@@ -24,6 +24,11 @@ class Species
     private $observations;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="species")
+     */
+    private $images;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $name;
@@ -47,11 +52,6 @@ class Species
      * @ORM\Column(type="string")
      */
     private $description;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $image;
 
     /**
      * Get id
@@ -175,30 +175,6 @@ class Species
         return $this->description;
     }
 
-    /**
-     * Set image
-     *
-     * @param string $image
-     *
-     * @return Species
-     */
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    /**
-     * Get image
-     *
-     * @return string
-     */
-    public function getImage()
-    {
-        return $this->image;
-    }
-
     public function __construct()
     {
         $this->observations = new ArrayCollection();
@@ -236,5 +212,39 @@ class Species
     public function getObservations()
     {
         return $this->observations;
+    }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\Image $image
+     *
+     * @return Species
+     */
+    public function addImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\Image $image
+     */
+    public function removeImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
     }
 }

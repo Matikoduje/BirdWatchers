@@ -36,6 +36,11 @@ class Observation
     private $species;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="observation")
+     */
+    private $images;
+
+    /**
      * @ORM\Column(type="datetime")
      */
     private $createdAt;
@@ -64,11 +69,6 @@ class Observation
      * @ORM\Column(type="decimal", precision=6, scale=4)
      */
     private $longitude;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $images;
 
     /**
      * @ORM\Column(type="string")
@@ -137,14 +137,6 @@ class Observation
     public function setLongitude($longitude)
     {
         $this->longitude = $longitude;
-    }
-
-    /**
-     * @param mixed $images
-     */
-    public function setImages($images)
-    {
-        $this->images = $images;
     }
 
     /**
@@ -246,16 +238,6 @@ class Observation
     }
 
     /**
-     * Get images
-     *
-     * @return string
-     */
-    public function getImages()
-    {
-        return $this->images;
-    }
-
-    /**
      * Get description
      *
      * @return string
@@ -335,5 +317,39 @@ class Observation
     public function getSpecies()
     {
         return $this->species;
+    }
+
+    /**
+     * Add image
+     *
+     * @param \AppBundle\Entity\Image $image
+     *
+     * @return Observation
+     */
+    public function addImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images[] = $image;
+
+        return $this;
+    }
+
+    /**
+     * Remove image
+     *
+     * @param \AppBundle\Entity\Image $image
+     */
+    public function removeImage(\AppBundle\Entity\Image $image)
+    {
+        $this->images->removeElement($image);
+    }
+
+    /**
+     * Get images
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getImages()
+    {
+        return $this->images;
     }
 }

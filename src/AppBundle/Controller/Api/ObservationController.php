@@ -21,26 +21,29 @@ class ObservationController extends Controller
      */
     public function indexAction(Request $request)
     {
-//        $observation = new Observation();
-//        $form = $this->createForm(ObservationType::class, $observation);
-//        $this->processForm($request, $form);
-//        $em = $this->getDoctrine()->getManager();
-//        $user = $em->getRepository('AppBundle:User')->findOneByLogin('admin');
-//        $observation->setUser($user);
-//        $em->persist($observation);
-//        $em->flush();
-//        $data = $this->serializeObservation($observation);
-//        $response = new JsonResponse($data, 201);
-//        $observationUrl = $this->generateUrl(
-//            'apiObservationShow',
-//            ['id' => $observation->getId()]
-//        );
-//        $response->headers->set('Location', $observationUrl);
-//        return $response;
-        $data = array(
-            'dada' => 'lalal'
-        );
+        $observation = new Observation();
+        $data = $request->request->get('observation');
+        $observation->setUser($this->getUser());
+        $observation->setLocation($data['location']);
+        $observation->setState($data['state']);
+        $observation->setImages($data['images']);
+        $observation->setLatitude($data['latitude']);
+        $observation->setLongitude($data['longitude']);
+        $observation->setDescription($data['description']);
+        $species = $this->getDoctrine()
+            ->getRepository('AppBundle:Species')
+            ->find($data['species']);
+        $observation->setSpecies($species);
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($observation);
+        $em->flush();
+        $data = $this->serializeObservation($observation);
         $response = new JsonResponse($data, 201);
+        $observationUrl = $this->generateUrl(
+            'apiObservationShow',
+            ['id' => $observation->getId()]
+        );
+        $response->headers->set('Location', $observationUrl);
         return $response;
     }
 
@@ -84,7 +87,7 @@ class ObservationController extends Controller
 
     /**
      * @Route("/api/observation/{id}")
-     * @Method("PUT, PATCH")
+     * @Method("PUT")
      */
     public function updateAction($id, Request $request)
     {
@@ -140,8 +143,9 @@ class ObservationController extends Controller
     private function processForm(Request $request, FormInterface $form)
     {
         $data = json_decode($request->getContent(), true);
-        $clearMissing = $request->getMethod() != 'PATCH';
-        $form->submit($data, $clearMissing);
+//        $clearMissing = $request->getMethod() != 'PATCH';
+//        $form->submit($data, $clearMissing);
+        $form->submit($data);
     }
 
     private function serializeObservation(Observation $observation)
@@ -149,7 +153,8 @@ class ObservationController extends Controller
         return array(
             'longitude' => $observation->getLongitude(),
             'latitude' => $observation->getLatitude(),
-            'description' => $observation->getDescription()
+            'description' => $observation->getDescription(),
+            'id' => $observation->getId()
         );
     }
 

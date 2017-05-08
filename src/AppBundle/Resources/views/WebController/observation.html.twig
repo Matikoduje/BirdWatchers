@@ -1,0 +1,17 @@
+{% extends "::base.html.twig" %}
+{% block title %}
+    Obserwacja {{ id }}
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('js/observation.js') }}"></script>
+{% endblock %}
+{% block container %}
+    <div class="row">
+        <div id="info" class="col-lg-8">
+
+        </div>
+        <div class="col-lg-4" id="mapId" style="height: 70vh;">
+
+        </div>
+    </div>
+{% endblock %}

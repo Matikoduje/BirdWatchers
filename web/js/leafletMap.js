@@ -1,4 +1,15 @@
 $(document).ready(function () {
+    function getLatitudeLongitude(latlng) {
+        var array;
+        var lat;
+        var lng;
+        array = latlng.split(',');
+        lat = array[0];
+        lng = array[1];
+        $('#observation_latitude').val(lat.substring(7,14));
+        $('#observation_longitude').val(lng.substring(1,8));
+    };
+    
     var mymap = L.map('mapId').setView([50.15, 19.00], 13);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
@@ -9,6 +20,10 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
+    mymap.on('click', function (e) {
+        getLatitudeLongitude(e.latlng.toString());
+    });
+
     var $requestGet;
 
     $requestGet = $.ajax({
@@ -18,13 +33,23 @@ $(document).ready(function () {
     });
 
     $requestGet.done(function (response) {
+
         $.each(response.observations, function (index, value) {
             var marker = L.marker([value.latitude, value.longitude]).addTo(mymap);
             marker.bindPopup(value.description);
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
+            marker.on('click', function (e) {
+                window.location.href = "/observation/" + value.id;
+            });
         });
     });
 
-    $('#observation_save').click(function () {
+    $('#observation_save').click(function (e) {
        var $form = $('form');
        var values = {};
         $.each( $form.serializeArray(), function(i, field) {
@@ -33,8 +58,8 @@ $(document).ready(function () {
         var $requestPost;
 
         $requestPost = $.ajax({
-            type        : $form.attr( 'method' ),
-            url         : $form.attr( 'action' ),
+            type        : 'POST',
+            url         : '/api/observation',
             data        : values
         });
 
