@@ -59,11 +59,6 @@ class User implements UserInterface
     private $password;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="user")
-     */
-    private $comments;
-
-    /**
      * @ORM\OneToMany(targetEntity="Observation", mappedBy="user")
      */
     private $observations;
@@ -291,40 +286,6 @@ class User implements UserInterface
     public function getUserProfile()
     {
         return $this->userProfile;
-    }
-
-    /**
-     * Add comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     *
-     * @return User
-     */
-    public function addComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments[] = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Remove comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     */
-    public function removeComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments->removeElement($comment);
-    }
-
-    /**
-     * Get comments
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getComments()
-    {
-        return $this->comments;
     }
 
     /**

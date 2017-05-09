@@ -13,3 +13,7 @@ services:
         autowire: true
         tags:
               - { name: doctrine.event_subscriber }
+
+    app.image_uploader:
+        class: AppBundle\File\FileUploader
+        arguments: ['%images_directory%']

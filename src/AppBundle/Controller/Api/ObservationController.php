@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Api;
 
+use AppBundle\Entity\Image;
 use AppBundle\Entity\Observation;
 use AppBundle\Form\ObservationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
@@ -21,23 +22,33 @@ class ObservationController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $observation = new Observation();
+        $em = $this->getDoctrine()->getManager();
         $data = $request->request->get('observation');
+        $observation = new Observation();
         $observation->setUser($this->getUser());
         $observation->setLocation($data['location']);
         $observation->setState($data['state']);
-        $observation->setImages($data['images']);
         $observation->setLatitude($data['latitude']);
         $observation->setLongitude($data['longitude']);
         $observation->setDescription($data['description']);
-        $species = $this->getDoctrine()
+        $observedSpecies = $this->getDoctrine()
             ->getRepository('AppBundle:Species')
             ->find($data['species']);
-        $observation->setSpecies($species);
-        $em = $this->getDoctrine()->getManager();
+        $observation->setSpecies($observedSpecies);
+        $files = $request->files->all();
+        foreach ($files as $file) {
+            $filename = $this->get('app.image_uploader')->upload($file);
+            $image = new Image();
+            $image->setSpecies($observedSpecies);
+            $image->setObservation($observation);
+            $image->setName($filename);
+            $em->persist($image);
+        }
         $em->persist($observation);
         $em->flush();
-        $data = $this->serializeObservation($observation);
+        $data = array(
+            'message' => 'OK'
+        );
         $response = new JsonResponse($data, 201);
         $observationUrl = $this->generateUrl(
             'apiObservationShow',

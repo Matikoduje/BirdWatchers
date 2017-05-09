@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -25,6 +26,8 @@ class Image
 
     /**
      * @ORM\Column(type="string")
+     * @Assert\NotBlank(message="Proszę przesłać zdjęcia w formacie jpg")
+     * @Assert\File(mimeTypes={ "image/jpeg" })
      */
     private $name;
 
@@ -125,5 +128,10 @@ class Image
     public function getSpecies()
     {
         return $this->species;
+    }
+
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
     }
 }

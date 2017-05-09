@@ -16,3 +16,14 @@
 /web/bundles/
 /.idea
 /testing.php
+/web/uploads/
+app/Resources/views/default/
+src/AppBundle/Entity/Comment.php~
+src/AppBundle/Entity/Image.php~
+src/AppBundle/Entity/Observation.php~
+src/AppBundle/Entity/Species.php~
+src/AppBundle/Entity/User.php~
+src/AppBundle/Entity/UserProfile.php~
+web/uploads/
+/myData/
+myData/

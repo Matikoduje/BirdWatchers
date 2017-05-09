@@ -178,6 +178,7 @@ class Species
     public function __construct()
     {
         $this->observations = new ArrayCollection();
+        $this->images = new ArrayCollection();
     }
 
     /**

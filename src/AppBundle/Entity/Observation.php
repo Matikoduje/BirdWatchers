@@ -25,11 +25,6 @@ class Observation
     private $user;
 
     /**
-     * @ORM\OneToMany(targetEntity="Comment", mappedBy="observation")
-     */
-    private $comments;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Species", inversedBy="observations")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -80,7 +75,7 @@ class Observation
         $this->createdAt = new \DateTime();
         $this->observationDate = new \DateTime();
         $this->comments = new ArrayCollection();
-
+        $this->images = new ArrayCollection();
     }
 
     /**
@@ -194,30 +189,6 @@ class Observation
     }
 
     /**
-     * Set comments
-     *
-     * @param string $comments
-     *
-     * @return Observation
-     */
-    public function setComments($comments)
-    {
-        $this->comments = $comments;
-
-        return $this;
-    }
-
-    /**
-     * Get comments
-     *
-     * @return string
-     */
-    public function getComments()
-    {
-        return $this->comments;
-    }
-
-    /**
      * Get location
      *
      * @return string
@@ -269,30 +240,6 @@ class Observation
     public function getUser()
     {
         return $this->user;
-    }
-
-    /**
-     * Add comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     *
-     * @return Observation
-     */
-    public function addComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments[] = $comment;
-
-        return $this;
-    }
-
-    /**
-     * Remove comment
-     *
-     * @param \AppBundle\Entity\Comment $comment
-     */
-    public function removeComment(\AppBundle\Entity\Comment $comment)
-    {
-        $this->comments->removeElement($comment);
     }
 
     /**
