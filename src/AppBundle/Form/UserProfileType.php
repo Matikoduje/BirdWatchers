@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -18,51 +19,21 @@ class UserProfileType extends AbstractType
         $builder
             ->add('name', TextType::class, array(
                 'label' => 'Imię',
-                'required' => false,
-                'constraints' => array(
-                    new Length(array(
-                        'min' => 3,
-                        'max' => 15,
-                        'minMessage' => 'Imię nie powinno być krótsze niż 3 znaki',
-                        'maxMessage' => 'Imię nie powinno być dłuższe niż 15 znaków'
-                    ))
-                )
+                'required' => false
             ))
             ->add('surname', TextType::class, array(
                 'label' => 'Imię',
-                'required' => false,
-                'constraints' => array(
-                    new Length(array(
-                        'min' => 3,
-                        'max' => 20,
-                        'minMessage' => 'Nazwisko nie powinno być krótsze niż 3 znaki',
-                        'maxMessage' => 'Nazwisko nie powinno być dłuższe niż 20 znaków'
-                    ))
-                )
+                'required' => false
             ))
             ->add('city', TextType::class, array(
                 'label' => 'Miejscowość',
-                'required' => false,
-                'constraints' => array(
-                    new Length(array(
-                        'min' => 3,
-                        'max' => 31,
-                        'minMessage' => 'Miejscowosć nie powinna mieć mniej niż 3 znaki',
-                        'maxMessage' => 'Miejscowość nie powinna mieć więcej niż 31 znaków'
-                    ))
-                )
+                'required' => false
             ))
-            ->add('state', TextType::class, array(
+            ->add('state', EntityType::class, array(
                 'label' => 'Województwo',
                 'required' => false,
-                'constraints' => array(
-                    new Length(array(
-                        'min' => 3,
-                        'max' => 20,
-                        'minMessage' => 'Nazwisko nie powinno być krótsze niż 3 znaki',
-                        'maxMessage' => 'Nazwisko nie powinno być dłuższe niż 20 znaków'
-                    ))
-                )
+                'class' => 'AppBundle\Entity\State',
+                'choice_label' => 'name'
             ))
             ->add('profilePicture', FileType::class, array(
                 'label' => 'Dodaj zdjęcie profilowe',

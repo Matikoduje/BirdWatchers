@@ -1,5 +1,12 @@
 AppBundle\Entity\UserProfile:
     userProfile0:
+AppBundle\Entity\State:
+    state0:
+        name: --------
+    state1:
+        name: Slaskie
+    state2:
+        name: Małopolskie
 AppBundle\Entity\User:
     user0:
         login: admin
@@ -12,7 +19,6 @@ AppBundle\Entity\Species:
     species0:
         speciesOrder: Ciconiformes
         description: Bociek
-        image: Dada
         name: Bocian Bialy
         latinName: Ciconia Ciconia
         family: Ciconidae
@@ -21,28 +27,29 @@ AppBundle\Entity\Observation:
         user: '@user0'
         species: '@species0'
         location: Katowice
-        state: Slaskie
+        state: '@state1'
         latitude: 50.1500
         longitude: 19.0000
         description: Zaobserwowalem Bocka
-        images: Brak
     observation2:
         user: '@user0'
         species: '@species0'
         location: Katowice
-        state: Slaskie
+        state: '@state1'
         latitude: 50.1600
         longitude: 19.1000
         description: Zaobserwowalem Bocka
-        images: Brak
     observation3:
         user: '@user0'
         species: '@species0'
         location: Katowice
-        state: Slaskie
+        state: '@state1'
         latitude: 50.1400
         longitude: 19.2000
         description: Zaobserwowalem Bocka
-        images: Brak
-
+AppBundle\Entity\Image:
+    image0:
+        name: Dladadada
+        species: '@species0'
+        observation: '@observation1'
 

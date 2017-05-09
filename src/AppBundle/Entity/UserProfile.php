@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Entity;
+
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
 
@@ -27,11 +29,21 @@ class UserProfile
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^[A-ZŁŚŻ][a-ząęćłśżźńó]{2,14}$/",
+     *     match=true,
+     *     message="Proszę wprowadzić poprawnie imię"
+     * )
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^[A-ZŁŚŻ][a-ząęćłśżźńó]{2,19}$/",
+     *     match=true,
+     *     message="Proszę wprowadzić poprawnie nazwisko"
+     * )
      */
     private $surname;
 
@@ -42,11 +54,17 @@ class UserProfile
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\Regex(
+     *     pattern="/^[A-ZŁŚŻ][a-z-ą ęćłśżźńó]{2,30}$/",
+     *     match=true,
+     *     message="Proszę wprowadzić poprawną nazwę miasta"
+     * )
      */
     private $city;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State", inversedBy="userProfile")
+     * @ORM\JoinColumn(nullable=true)
      */
     private $state;
 
@@ -115,19 +133,26 @@ class UserProfile
     }
 
     /**
-     * @return mixed
+     * Set state
+     *
+     * @param \AppBundle\Entity\State $state
+     *
+     * @return UserProfile
+     */
+    public function setState(\AppBundle\Entity\State $state = null)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return \AppBundle\Entity\State
      */
     public function getState()
     {
         return $this->state;
     }
-
-    /**
-     * @param mixed $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
-    }
-
 }

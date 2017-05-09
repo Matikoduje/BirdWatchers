@@ -18,9 +18,7 @@ class ObservationController extends Controller
      */
     public function showMapAction()
     {
-        $form = $this->createForm(ObservationType::class);
         return $this->render('AppBundle:WebController:map.html.twig', array(
-            'form' => $form->createView()
         ));
     }
 
@@ -32,6 +30,18 @@ class ObservationController extends Controller
     {
         return $this->render('AppBundle:WebController:observation.html.twig', array(
             'id' => $id
+        ));
+    }
+
+    /**
+     * @Route("/addObservation",
+     *     name="addMap")
+     */
+    public function addMapAction()
+    {
+        $form = $this->createForm(ObservationType::class);
+        return $this->render('AppBundle:WebController:add.html.twig', array(
+            'form' => $form->createView()
         ));
     }
 }

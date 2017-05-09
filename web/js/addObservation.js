@@ -24,31 +24,6 @@ $(document).ready(function () {
         getLatitudeLongitude(e.latlng.toString());
     });
 
-    var $requestGet;
-
-    $requestGet = $.ajax({
-        url: "/api/observation",
-        type: "get",
-        dataType: "json"
-    });
-
-    $requestGet.done(function (response) {
-
-        $.each(response.observations, function (index, value) {
-            var marker = L.marker([value.latitude, value.longitude]).addTo(mymap);
-            marker.bindPopup(value.description);
-            marker.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            marker.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            marker.on('click', function (e) {
-                window.location.href = "/observation/" + value.id;
-            });
-        });
-    });
-
     $('#observation_save').click(function (e) {
         var $form = $('form');
         var values = {};
@@ -65,7 +40,6 @@ $(document).ready(function () {
         dataFromForm.append("observation[longitude]", document.getElementById("observation_longitude").value);
         dataFromForm.append("observation[description]", document.getElementById("observation_description").value);
         dataFromForm.append("image", $('input[type=file]')[0].files[0]);
-        //dataFromForm.append("observation[images]", document.getElementById("observation_images").files);
 
         $requestPost = $.ajax({
             type: 'POST',

@@ -51,7 +51,8 @@ class Observation
     private $location;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\State", inversedBy="observations")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $state;
 
@@ -92,14 +93,6 @@ class Observation
     public function setLocation($location)
     {
         $this->location = $location;
-    }
-
-    /**
-     * @param mixed $state
-     */
-    public function setState($state)
-    {
-        $this->state = $state;
     }
 
     /**
@@ -199,16 +192,6 @@ class Observation
     }
 
     /**
-     * Get state
-     *
-     * @return string
-     */
-    public function getState()
-    {
-        return $this->state;
-    }
-
-    /**
      * Get description
      *
      * @return string
@@ -298,5 +281,29 @@ class Observation
     public function getImages()
     {
         return $this->images;
+    }
+
+    /**
+     * Set state
+     *
+     * @param \AppBundle\Entity\State $state
+     *
+     * @return Observation
+     */
+    public function setState(\AppBundle\Entity\State $state)
+    {
+        $this->state = $state;
+
+        return $this;
+    }
+
+    /**
+     * Get state
+     *
+     * @return \AppBundle\Entity\State
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }

@@ -1,18 +1,12 @@
 {% extends "::base.html.twig" %}
-{% form_theme form 'bootstrap_3_layout.html.twig' %}
 {% block title %}
-    BlaBlaBla
+    Obserwacje
 {% endblock %}
 {% block javascript %}
-    <script src="{{ asset('js/leafletMap.js') }}"></script>
+    <script src="{{ asset('js/allObservations.js') }}"></script>
 {% endblock %}
 {% block container %}
     <div class="row">
-        <div class="col-lg-4">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            {{ form_end(form) }}
-        </div>
         <div class="col-lg-8" id="mapId" style="height: 70vh;">
 
         </div>
