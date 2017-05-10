@@ -25,7 +25,13 @@ $(document).ready(function () {
         }).addTo(mymap);
 
         var marker = L.marker([response.latitude, response.longitude]).addTo(mymap);
-        marker.bindPopup(response.description);
+        $('#observationUsername').html(response.userName);
+        $('#observationCreateDate').html(response.dateCreate);
+        $('#observationDate').html(response.dateO);
+        $('#observationSpecies').html(response.species);
+        $('#observationLocation').html(response.location);
+        $('#observationState').html(response.state);
+        $('#observationDescription').html(response.description);
     });
 
 

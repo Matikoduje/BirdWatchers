@@ -90,7 +90,7 @@ class ObservationController extends Controller
             ->findAll();
         $data = array('observations' => array());
         foreach ($observations as $observation) {
-            $data['observations'][] = $this->serializeObservation($observation);
+            $data['observations'][] = $this->serializeObservations($observation);
         }
         $response = new JsonResponse($data, 200);
         return $response;
@@ -165,7 +165,13 @@ class ObservationController extends Controller
             'longitude' => $observation->getLongitude(),
             'latitude' => $observation->getLatitude(),
             'description' => $observation->getDescription(),
-            'id' => $observation->getId()
+            'userName' => $observation->getUser()->getLogin(),
+            'dateCreate' => $observation->getCreatedAt()->format('Y-m-d'),
+            'dateO' => $observation->getObservationDate()->format('Y-m-d'),
+            'species' => $observation->getSpecies()->getName(),
+            'state' => $observation->getState(),
+            'location' => $observation->getLocation(),
+            'description' => $observation->getDescription(),
         );
     }
 
@@ -174,7 +180,9 @@ class ObservationController extends Controller
         return array(
             'longitude' => $observation->getLongitude(),
             'latitude' => $observation->getLatitude(),
-            'description' => $observation->getDescription()
+            'species' => $observation->getSpecies()->getName(),
+            'id' => $observation->getId(),
+            'dateO' => $observation->getObservationDate()->format('Y-m-d'),
         );
     }
 }

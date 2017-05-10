@@ -23,7 +23,7 @@ $(document).ready(function () {
 
         $.each(response.observations, function (index, value) {
             var marker = L.marker([value.latitude, value.longitude]).addTo(mymap);
-            marker.bindPopup(value.description);
+            marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
             marker.on('mouseover', function (e) {
                 this.openPopup();
             });
