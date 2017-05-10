@@ -49,6 +49,22 @@ class UserProfile
 
     /**
      * @ORM\Column(type="string", nullable=true)
+     * @Assert\File(
+     *     mimeTypes= { "image/jpeg" },
+     *     mimeTypesMessage= "Zdjęcie musi być w formacie jpeg",
+     *     maxSize= "1024k",
+     *     maxSizeMessage= " Zdjęcie powinno być mniejsze niż 1 mb"
+     * )
+     * @Assert\Image(
+     *     minWidth = 160,
+     *     maxWidth = 180,
+     *     minHeight = 160,
+     *     maxHeight = 180,
+     *     minWidthMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
+     *     maxWidthMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
+     *     minHeightMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
+     *     maxHeightMessage= "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180"
+     * )
      */
     private $profilePicture;
 

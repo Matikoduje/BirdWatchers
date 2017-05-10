@@ -10,6 +10,8 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
+use Symfony\Component\Validator\Constraints\Image;
 use Symfony\Component\Validator\Constraints\Length;
 
 class UserProfileType extends AbstractType
@@ -38,7 +40,7 @@ class UserProfileType extends AbstractType
             ->add('profilePicture', FileType::class, array(
                 'label' => 'Dodaj zdjęcie profilowe',
                 'required' => false,
-                'data_class' => null
+                'data_class' => null,
             ))
             ->add('save', SubmitType::class, array(
                'label' => 'Zapisz',

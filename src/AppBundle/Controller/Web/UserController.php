@@ -4,6 +4,8 @@ namespace AppBundle\Controller\Web;
 
 use AppBundle\Entity\User;
 use AppBundle\Entity\UserProfile;
+use AppBundle\Form\ChangeEmailType;
+use AppBundle\Form\ChangePasswordType;
 use AppBundle\Form\UserProfileType;
 use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -59,6 +61,9 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
+            $file = $post->getProfilePicture();
+            $filename = $this->get('app.image_uploader')->upload($file);
+            $post->setProfilePicture($filename);
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
@@ -66,6 +71,36 @@ class UserController extends Controller
 
         return $this->render('AppBundle:UserController:addUser.html.twig', array(
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/changeUserData",
+     *     name="changeUserData")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function changeUserInformationAction(Request $request)
+    {
+        $user = $this->getUser();
+        $formEmail = $this->createForm(ChangeEmailType::class, $user);
+        $formPassword = $this->createForm(ChangePasswordType::class, $user);
+        $formEmail->handleRequest($request);
+        $formPassword->handleRequest($request);
+        if ($formEmail->isSubmitted() && $formEmail->isValid()) {
+            $post = $formEmail->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($post);
+            $em->flush();
+        }
+        if ($formPassword->isSubmitted() && $formPassword->isValid()) {
+            $post = $formPassword->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($post);
+            $em->flush();
+        }
+        return $this->render('AppBundle:UserController:changeUser.html.twig', array(
+            'formEmail' => $formEmail->createView(),
+            'formPassword' => $formPassword->createView()
         ));
     }
 }

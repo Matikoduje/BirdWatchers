@@ -6,6 +6,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -42,12 +43,27 @@ class User implements UserInterface
      * @var string
      *
      * @ORM\Column(name="login", type="string", length=15, unique=true)
+     * @Assert\NotBlank(message = "Proszę wprowadzić poprawny login")
+     * @Assert\Length(
+     *     min = 5,
+     *     max = 15,
+     *     minMessage = "Login powienien posiadać od 5 do 15 znaków",
+     *     maxMessage = "Login powienien posiadać od 5 do 15 znaków"
+     * )
      */
     private $login;
 
     /**
      * @var string
      * @ORM\Column(name="email", type="string", length=50, unique=true)
+     * @Assert\NotBlank(message = "Proszę wprowadzić poprawny adres e-mail")
+     * @Assert\Email(message = "Podany e-mail nie jest poprawny")
+     * @Assert\Length(
+     *     min = 5,
+     *     max = 50,
+     *     minMessage="Email powinien być dłuższy niż 5 znaków",
+     *     maxMessage="Email powinien być krótszy niż 50 znaków"
+     * )
      */
     private $email;
 
