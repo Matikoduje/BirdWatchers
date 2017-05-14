@@ -25,9 +25,29 @@ class Image
     private $createdAt;
 
     /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
      * @ORM\Column(type="string")
-     * @Assert\NotBlank(message="Proszę przesłać zdjęcia w formacie jpg")
-     * @Assert\File(mimeTypes={ "image/jpeg" })
+     */
+    private $path;
+
+    /**
+     * @ORM\Column(type="string")
+     *
      */
     private $name;
 

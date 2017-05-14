@@ -48,12 +48,12 @@ class UserProfile
     private $surname;
 
     /**
-     * @ORM\Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true, length=255)
      * @Assert\File(
      *     mimeTypes= { "image/jpeg" },
      *     mimeTypesMessage= "Zdjęcie musi być w formacie jpeg",
-     *     maxSize= "1024k",
-     *     maxSizeMessage= " Zdjęcie powinno być mniejsze niż 1 mb"
+     *     maxSize= "300k",
+     *     maxSizeMessage= " Zdjęcie powinno być mniejsze niż 300 kb"
      * )
      * @Assert\Image(
      *     minWidth = 160,

@@ -24,35 +24,4 @@ $(document).ready(function () {
         getLatitudeLongitude(e.latlng.toString());
     });
 
-    $('#observation_save').click(function (e) {
-        var $form = $('form');
-        var values = {};
-        $.each($form.serializeArray(), function (i, field) {
-            values[field.name] = field.value;
-        });
-        var $requestPost;
-
-        var dataFromForm = new FormData();
-        dataFromForm.append("observation[location]", document.getElementById("observation_location").value);
-        dataFromForm.append("observation[species]", document.getElementById("observation_species").value);
-        dataFromForm.append("observation[state]", document.getElementById("observation_state").value);
-        dataFromForm.append("observation[latitude]", document.getElementById("observation_latitude").value);
-        dataFromForm.append("observation[longitude]", document.getElementById("observation_longitude").value);
-        dataFromForm.append("observation[description]", document.getElementById("observation_description").value);
-        dataFromForm.append("image", $('input[type=file]')[0].files[0]);
-
-        $requestPost = $.ajax({
-            type: 'POST',
-            url: '/api/observation',
-            data: dataFromForm,
-            contentType:false,
-            processData:false
-        });
-        $requestPost.done(function (response) {
-            console.log(response.message);
-        });
-
-    });
-
-
 });

@@ -61,9 +61,11 @@ class UserController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            $file = $post->getProfilePicture();
-            $filename = $this->get('app.image_uploader')->upload($file);
-            $post->setProfilePicture($filename);
+            if ($post->getProfilePicture()) {
+                $file = $post->getProfilePicture();
+                $filename = $this->get('app.image_uploader')->upload($file);
+                $post->setProfilePicture($filename);
+            }
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();

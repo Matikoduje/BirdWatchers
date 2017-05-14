@@ -4,6 +4,7 @@
 namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -32,21 +33,28 @@ class Observation
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Image", mappedBy="observation")
+     * @ORM\JoinColumn(nullable=false)
      */
     private $images;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=false)
      */
     private $createdAt;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="date", nullable=false)
+     * @Assert\NotBlank(
+     *     message = "Proszę wprowadzić datę obserwacji"
+     * )
      */
     private $observationDate;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank(
+     *     message = "Proszę uzupełnić pole"
+     * )
      */
     private $location;
 
@@ -57,24 +65,38 @@ class Observation
     private $state;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=4)
+     * @ORM\Column(type="decimal", precision=6, scale=4, nullable=false)
+     * @Assert\NotBlank(
+     *     message = "Proszę uzupełnić pole"
+     * )
      */
     private $latitude;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=4)
+     * @ORM\Column(type="decimal", precision=6, scale=4, nullable=false)
+     * @Assert\NotBlank(
+     *     message = "Proszę uzupełnić pole"
+     * )
+     * @Assert\Range(
+     *     min = 14.07,
+     *     max = 24.09,
+     *     minMessage= "Proszę wprowadzić lokalizację, która jest w granicach Polski",
+     *     maxMessage= "Proszę wprowadzić lokalizację, która jest w granicach Polski"
+     * )
      */
     private $longitude;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=false)
+     * @Assert\NotBlank(
+     *     message = "Proszę uzupełnić pole"
+     * )
      */
     private $description;
 
     public function __construct()
     {
         $this->createdAt = new \DateTime();
-        $this->observationDate = new \DateTime();
         $this->comments = new ArrayCollection();
         $this->images = new ArrayCollection();
     }

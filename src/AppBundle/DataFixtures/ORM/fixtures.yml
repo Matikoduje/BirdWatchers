@@ -22,34 +22,37 @@ AppBundle\Entity\Species:
         name: Bocian Bialy
         latinName: Ciconia Ciconia
         family: Ciconidae
-AppBundle\Entity\Observation:
-    observation1:
-        user: '@user0'
-        species: '@species0'
-        location: Katowice
-        state: '@state1'
-        latitude: 50.1500
-        longitude: 19.0000
-        description: Zaobserwowalem Bocka
-    observation2:
-        user: '@user0'
-        species: '@species0'
-        location: Katowice
-        state: '@state1'
-        latitude: 50.1600
-        longitude: 19.1000
-        description: Zaobserwowalem Bocka
-    observation3:
-        user: '@user0'
-        species: '@species0'
-        location: Katowice
-        state: '@state1'
-        latitude: 50.1400
-        longitude: 19.2000
-        description: Zaobserwowalem Bocka
-AppBundle\Entity\Image:
-    image0:
-        name: Dladadada
-        species: '@species0'
-        observation: '@observation1'
+#AppBundle\Entity\Observation:
+#    observation1:
+#        user: '@user0'
+#        species: '@species0'
+#        location: Katowice
+#        state: '@state1'
+#        latitude: 50.1500
+#        longitude: 19.0000
+#        description: Zaobserwowalem Bocka
+#        observationDate: 2012-02-01
+#    observation2:
+#        user: '@user0'
+#        species: '@species0'
+#        location: Katowice
+#        state: '@state1'
+#        latitude: 50.1600
+#        longitude: 19.1000
+#        description: Zaobserwowalem Bocka
+#        observationDate: 2012-02-01
+#    observation3:
+#        user: '@user0'
+#        species: '@species0'
+#        location: Katowice
+#        state: '@state1'
+#        latitude: 50.1400
+#        longitude: 19.2000
+#        description: Zaobserwowalem Bocka
+#        observationDate: 2012-02-01
+#AppBundle\Entity\Image:
+#    image0:
+#        name: Dladadada
+#        species: '@species0'
+#        observation: '@observation1'
 

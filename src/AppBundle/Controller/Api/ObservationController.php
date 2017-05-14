@@ -15,48 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class ObservationController extends Controller
 {
-    /**
-     * @Route("/api/observation",
-     *     name="addObservation")
-     * @Method("POST")
-     */
-    public function indexAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $data = $request->request->get('observation');
-        $observation = new Observation();
-        $observation->setUser($this->getUser());
-        $observation->setLocation($data['location']);
-        $observation->setState($data['state']);
-        $observation->setLatitude($data['latitude']);
-        $observation->setLongitude($data['longitude']);
-        $observation->setDescription($data['description']);
-        $observedSpecies = $this->getDoctrine()
-            ->getRepository('AppBundle:Species')
-            ->find($data['species']);
-        $observation->setSpecies($observedSpecies);
-        $files = $request->files->all();
-        foreach ($files as $file) {
-            $filename = $this->get('app.image_uploader')->upload($file);
-            $image = new Image();
-            $image->setSpecies($observedSpecies);
-            $image->setObservation($observation);
-            $image->setName($filename);
-            $em->persist($image);
-        }
-        $em->persist($observation);
-        $em->flush();
-        $data = array(
-            'message' => 'OK'
-        );
-        $response = new JsonResponse($data, 201);
-        $observationUrl = $this->generateUrl(
-            'apiObservationShow',
-            ['id' => $observation->getId()]
-        );
-        $response->headers->set('Location', $observationUrl);
-        return $response;
-    }
 
     /**
      * @Route("/api/observation/{id}", name="apiObservationShow")
@@ -154,8 +112,6 @@ class ObservationController extends Controller
     private function processForm(Request $request, FormInterface $form)
     {
         $data = json_decode($request->getContent(), true);
-//        $clearMissing = $request->getMethod() != 'PATCH';
-//        $form->submit($data, $clearMissing);
         $form->submit($data);
     }
 
@@ -171,7 +127,6 @@ class ObservationController extends Controller
             'species' => $observation->getSpecies()->getName(),
             'state' => $observation->getState(),
             'location' => $observation->getLocation(),
-            'description' => $observation->getDescription(),
         );
     }
 
