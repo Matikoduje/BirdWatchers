@@ -69,6 +69,12 @@ class Observation
      * @Assert\NotBlank(
      *     message = "Proszę uzupełnić pole"
      * )
+     * @Assert\Range(
+     *     min = 49.00,
+     *     max = 55.00,
+     *     minMessage= "Proszę wprowadzić lokalizację, która jest w granicach Polski",
+     *     maxMessage= "Proszę wprowadzić lokalizację, która jest w granicach Polski"
+     * )
      */
     private $latitude;
 
