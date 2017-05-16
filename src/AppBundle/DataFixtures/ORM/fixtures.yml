@@ -4,9 +4,37 @@ AppBundle\Entity\State:
     state0:
         name: --------
     state1:
-        name: Slaskie
+        name: Śląskie
     state2:
         name: Małopolskie
+    state3:
+        name: Opolskie
+    state4:
+        name: Dolnośląskie
+    state5:
+        name: Lubuskie
+    state6:
+        name: Wielkopolskie
+    state7:
+        name: Mazowieckie
+    state8:
+        name: Łódzkie
+    state9:
+        name: Świętokrzyskie
+    state10:
+        name: Zachodniopomorskie
+    state11:
+        name: Kujawsko-pomorskie
+    state12:
+        name: Podkarpackie
+    state13:
+        name: Lubelskie
+    state14:
+        name: Podlaskie
+    state15:
+        name: Warmińsko-mazurskie
+    state16:
+        name: Pomorskie
 AppBundle\Entity\User:
     user0:
         login: admin
@@ -22,37 +50,5 @@ AppBundle\Entity\Species:
         name: Bocian Bialy
         latinName: Ciconia Ciconia
         family: Ciconidae
-#AppBundle\Entity\Observation:
-#    observation1:
-#        user: '@user0'
-#        species: '@species0'
-#        location: Katowice
-#        state: '@state1'
-#        latitude: 50.1500
-#        longitude: 19.0000
-#        description: Zaobserwowalem Bocka
-#        observationDate: 2012-02-01
-#    observation2:
-#        user: '@user0'
-#        species: '@species0'
-#        location: Katowice
-#        state: '@state1'
-#        latitude: 50.1600
-#        longitude: 19.1000
-#        description: Zaobserwowalem Bocka
-#        observationDate: 2012-02-01
-#    observation3:
-#        user: '@user0'
-#        species: '@species0'
-#        location: Katowice
-#        state: '@state1'
-#        latitude: 50.1400
-#        longitude: 19.2000
-#        description: Zaobserwowalem Bocka
-#        observationDate: 2012-02-01
-#AppBundle\Entity\Image:
-#    image0:
-#        name: Dladadada
-#        species: '@species0'
-#        observation: '@observation1'
+
 

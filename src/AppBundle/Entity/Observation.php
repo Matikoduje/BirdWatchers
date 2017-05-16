@@ -65,7 +65,7 @@ class Observation
     private $state;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=4, nullable=false)
+     * @ORM\Column(type="decimal", precision=8, scale=6, nullable=false)
      * @Assert\NotBlank(
      *     message = "Proszę uzupełnić pole"
      * )
@@ -79,7 +79,7 @@ class Observation
     private $latitude;
 
     /**
-     * @ORM\Column(type="decimal", precision=6, scale=4, nullable=false)
+     * @ORM\Column(type="decimal", precision=8, scale=6, nullable=false)
      * @Assert\NotBlank(
      *     message = "Proszę uzupełnić pole"
      * )
