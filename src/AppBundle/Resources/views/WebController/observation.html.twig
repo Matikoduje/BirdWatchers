@@ -17,24 +17,39 @@
     </div>
     <div class="row">
         <div id="observationId" class="col-lg-6">
-            <p>
-                Użytkownik: <span id="observationUsername"></span>
-            </p>
-            <p>
-                Data dodania obserwacji: <span id="observationCreateDate"></span>
-            </p>
-            <p>
-                Data obserwacji: <span id="observationDate"></span>
-            </p>
-            <p>
-                Gatunek: <span id="observationSpecies"></span>
-            </p>
-            <p>
-                Miejsce obserwacji <span id="observationLocation"></span>, woj. <span id="observationState"></span>
-            </p>
-            <p>
-                Opis: <span id="observationDescription"></span>
-            </p>
+            <div>
+                <h4>
+                    Informacje o obserwacji:
+                </h4>
+            </div>
+            <table class="table table-responsive">
+                <tbody>
+                    <tr>
+                        <td>Użytkownik</td>
+                        <td><span id="observationUsername"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Data dodania obserwacji</td>
+                        <td><span id="observationCreateDate"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Data obserwacji</td>
+                        <td><span id="observationDate"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Gatunek</td>
+                        <td><span id="observationSpecies"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Miejsce obserwacji</td>
+                        <td><span id="observationLocation"></span>, woj. <span id="observationState"></span></td>
+                    </tr>
+                    <tr>
+                        <td>Opis</td>
+                        <td><span id="observationDescription"></span></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div id="commentsId" class="col-lg-6"></div>
     </div>

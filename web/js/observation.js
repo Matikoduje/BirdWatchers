@@ -32,6 +32,19 @@ $(document).ready(function () {
         $('#observationLocation').html(response.location);
         $('#observationState').html(response.state);
         $('#observationDescription').html(response.description);
+        var imagesId = $('#imagesId');
+        var count;
+        count = response.images.length;
+        for (var i = 0; i < count; i++) {
+            if (count === 1) {
+                imagesId.append('<img style="max-height: 100%; max-width: 100%" src=/uploads/images' + response.images[i] + ' />');
+            } else if (count === 2) {
+                imagesId.append('<div class="col-lg-6"><img style="max-height: 100%; max-width: 100%" src=/uploads/images' + response.images[i] + ' /></div>');
+            } else {
+                imagesId.append('<div class="col-lg-4"><img style="max-height: 100%; max-width: 100%" src=/uploads/images' + response.images[i] + ' /></div>');
+            }
+        }
+
     });
 
 

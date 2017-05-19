@@ -74,6 +74,7 @@ class ObservationController extends Controller
             $post->setUser($this->getUser());
             $em->persist($post);
             $em->flush();
+            return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
         }
         return $this->render('AppBundle:WebController:add.html.twig', array(
             'form' => $form->createView()

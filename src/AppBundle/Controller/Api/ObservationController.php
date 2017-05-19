@@ -117,6 +117,11 @@ class ObservationController extends Controller
 
     private function serializeObservation(Observation $observation)
     {
+        $images = $observation->getImages();
+        $imgPath = array();
+        foreach ($images as $image) {
+            $imgPath[] = $image->getPath() . $image->getName();
+        }
         return array(
             'longitude' => $observation->getLongitude(),
             'latitude' => $observation->getLatitude(),
@@ -125,8 +130,9 @@ class ObservationController extends Controller
             'dateCreate' => $observation->getCreatedAt()->format('Y-m-d'),
             'dateO' => $observation->getObservationDate()->format('Y-m-d'),
             'species' => $observation->getSpecies()->getName(),
-            'state' => $observation->getState(),
+            'state' => $observation->getState()->getName(),
             'location' => $observation->getLocation(),
+            'images' => $imgPath
         );
     }
 

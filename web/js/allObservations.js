@@ -10,7 +10,6 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
-
     var $requestGet;
 
     $requestGet = $.ajax({
