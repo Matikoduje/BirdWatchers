@@ -10,18 +10,19 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
-    var $requestGet;
+    var requestGet;
 
-    $requestGet = $.ajax({
+    requestGet = $.ajax({
         url: "/api/observation",
         type: "get",
         dataType: "json"
     });
 
-    $requestGet.done(function (response) {
+    requestGet.done(function (response) {
 
+        var markers = [];
         $.each(response.observations, function (index, value) {
-            var marker = L.marker([value.latitude, value.longitude]).addTo(mymap);
+            var marker = L.marker([value.latitude, value.longitude]);
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
             marker.on('mouseover', function (e) {
                 this.openPopup();
@@ -32,7 +33,78 @@ $(document).ready(function () {
             marker.on('click', function (e) {
                 window.location.href = "/observation/" + value.id;
             });
+            markers.push(marker);
         });
+
+        var layerMarkers = L.layerGroup(markers).addTo(mymap);
+
     });
 
+    $('#userSearch').on('click', function (e) {
+        if ($(this).prop('checked', true)) {
+            $('#userVisible').removeClass('invisible');
+        }
+    });
+
+    $('#allUsers').on('click', function (e) {
+        if ($(this).prop('checked', true)) {
+            $('#userVisible').addClass('invisible');
+        }
+    });
+
+    $('#btnSearch').on('click', function () {
+        var requestSearch;
+        var speciesId = $('#sel1').val();
+        var timeAmount = $('#sel2').val();
+        var loginUser;
+
+        if ($('#userSearch').is(':checked')) {
+            loginUser = $('#userLogin').val();
+        } else {
+            loginUser = 'all';
+        }
+
+        requestSearch = $.ajax({
+            url: "/api/searchUser",
+            type: "get",
+            data: {login: loginUser, species: speciesId, time: timeAmount},
+            dataType: "json"
+        });
+
+        requestSearch.done(function (response) {
+           if (response.message === 'badUser') {
+               if ($('#infoUser').hasClass('invisible')) {
+                   $('#infoUser').removeClass('invisible');
+               }
+           } else {
+               if (!$('#infoUser').hasClass('invisible')) {
+                   $('#infoUser').addClass('invisible');
+               }
+
+               mymap.eachLayer(function (layer) {
+                   if (layer._leaflet_id >= 43) {
+                       mymap.removeLayer(layer);
+                   }
+               });
+
+               var markers = [];
+               $.each(response.observations, function (index, value) {
+                   var marker = L.marker([value.latitude, value.longitude]);
+                   marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
+                   marker.on('mouseover', function (e) {
+                       this.openPopup();
+                   });
+                   marker.on('mouseout', function (e) {
+                       this.closePopup();
+                   });
+                   marker.on('click', function (e) {
+                       window.location.href = "/observation/" + value.id;
+                   });
+                   markers.push(marker);
+               });
+
+               var layerMarkers = L.layerGroup(markers).addTo(mymap);
+           }
+        });
+    });
 });

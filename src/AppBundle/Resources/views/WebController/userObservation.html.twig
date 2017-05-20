@@ -1,0 +1,19 @@
+{% extends "::base.html.twig" %}
+{% block title %}
+    Obserwacje
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('js/userObservations.js') }}"></script>
+{% endblock %}
+{% block container %}
+    <div class="row">
+        <div class="col-lg-6" style="height: 70vh;">
+            <ul id="userObservations" class="list-group">
+
+            </ul>
+        </div>
+        <div class="col-lg-6" id="mapId" style="height: 70vh;">
+
+        </div>
+    </div>
+{% endblock %}

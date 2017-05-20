@@ -10,5 +10,36 @@
         <div class="col-lg-8" id="mapId" style="height: 70vh;">
 
         </div>
+        <div class="col-lg-4 form-group">
+            <label for="sel1">Wybierz gatunek:</label>
+            <select class="form-control" id="sel1">
+                <option value="all">Wszystkie</option>
+                {%  if species is defined %}
+                    {% for specie in species %}
+                        <option value={{ specie.id }}>{{ specie.name }}</option>
+                    {% endfor %}
+                {%  endif %}
+            </select>
+            <br>
+            <label for="sel2">Wybierz przedział czasowy:</label>
+            <select class="form-control" id="sel2">
+                <option value="all">Cały czas</option>
+                <option value="year">Ostatni rok</option>
+                <option value="month">Ostatni miesiąc</option>
+                <option value="week">Ostatni tydzień</option>
+                <option value="day">Ostatni dzień</option>
+            </select>
+            <br>
+            <label class="radio-inline"><input id="allUsers" type="radio" checked="checked" name="optradio">Wszyscy</label>
+            <label class="radio-inline"><input id="userSearch" type="radio" name="optradio">Wybierz użytkownika</label>
+            <br><br>
+            <div id="userVisible" class="invisible">
+                <label for="userLogin">Wpisz login użytkownika:</label>
+                <input class="form-control" type="text" id="userLogin" name="userLogin">
+                <p id="infoUser" class="text-danger invisible">Nie znaleziono użytkownika</p>
+            </div>
+            <br><br>
+            <button id="btnSearch" class="btn btn-sm btn-primary" type="button">Wyszukaj</button>
+        </div>
     </div>
 {% endblock %}

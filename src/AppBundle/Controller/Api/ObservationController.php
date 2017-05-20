@@ -7,12 +7,16 @@ use AppBundle\Entity\Observation;
 use AppBundle\Form\ObservationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * @Security("is_granted('ROLE_USER')")
+ */
 class ObservationController extends Controller
 {
 
@@ -55,30 +59,19 @@ class ObservationController extends Controller
     }
 
     /**
-     * @Route("/api/observation/{id}")
-     * @Method("PUT")
+     * @Route("/api/myObservations")
+     * @Method("GET")
      */
-    public function updateAction($id, Request $request)
+    public function myObservationsAction()
     {
-        $observation = $this->getDoctrine()
+        $user = $this->getUser();
+        $observations = $this->getDoctrine()
             ->getRepository('AppBundle:Observation')
-            ->find($id);
-
-        if (!$observation) {
-            throw $this->createNotFoundException(sprintf(
-                'Obserwacja o id "%d" nie istnieje w bazie',
-                $id
-            ));
+            ->findsAllByUser($user->getId());
+        $data = array('observations' => array());
+        foreach ($observations as $observation) {
+            $data['observations'][] = $this->serializeObservations($observation);
         }
-
-        $form = $this->createForm(ObservationType::class, $observation);
-        $this->processForm($request, $form);
-
-        $em = $this->getDoctrine()->getManager();
-        $em->persist($observation);
-        $em->flush();
-
-        $data = $this->serializeObservation($observation);
         $response = new JsonResponse($data, 200);
         return $response;
     }
@@ -107,12 +100,6 @@ class ObservationController extends Controller
         }
 
         return new Response(null, 204);
-    }
-
-    private function processForm(Request $request, FormInterface $form)
-    {
-        $data = json_decode($request->getContent(), true);
-        $form->submit($data);
     }
 
     private function serializeObservation(Observation $observation)
@@ -144,6 +131,53 @@ class ObservationController extends Controller
             'species' => $observation->getSpecies()->getName(),
             'id' => $observation->getId(),
             'dateO' => $observation->getObservationDate()->format('Y-m-d'),
+            'location' => $observation->getLocation(),
         );
+    }
+
+    /**
+     * @Route("api/searchUser", name="searchUser")
+     * @Method("GET")
+     */
+    public function searchUserAction(Request $request)
+    {
+
+        $userLogin = $request->query->get('login');
+        $species = $request->query->get('species');
+        $time = $request->query->get('time');
+        $isUserExist = false;
+
+        $repositoryUser = $this->getDoctrine()->getRepository('AppBundle:User');
+        $repositoryObservation = $this->getDoctrine()->getRepository('AppBundle:Observation');
+        $repositorySpecies = $this->getDoctrine()->getRepository('AppBundle:Species');
+
+        if ($userLogin === 'all') {
+            $isUserExist = true;
+            $user = $userLogin;
+        } else {
+            $user = $repositoryUser->findOneByLogin($userLogin);
+            if ($user) {
+                $isUserExist = true;
+            } else {
+                $data = array(
+                    'message' => 'badUser'
+                );
+            }
+        }
+
+        if ($species !== 'all') {
+            $species = $repositorySpecies->find($species);
+        }
+
+        if ($isUserExist) {
+            $observations = $repositoryObservation->findByParameters($user, $species, $time);
+            $data = array('observations' => array());
+            foreach ($observations as $observation) {
+                $data['observations'][] = $this->serializeObservations($observation);
+            }
+        }
+        $response = new JsonResponse($data, 200);
+        return $response;
+
     }
 }

@@ -21,7 +21,10 @@ class ObservationController extends Controller
      */
     public function showMapAction()
     {
+        $species = $this->getDoctrine()->getRepository('AppBundle:Species')
+            ->findAll();
         return $this->render('AppBundle:WebController:map.html.twig', array(
+            'species' => $species
         ));
     }
 
@@ -78,6 +81,15 @@ class ObservationController extends Controller
         }
         return $this->render('AppBundle:WebController:add.html.twig', array(
             'form' => $form->createView()
+        ));
+    }
+
+    /**
+     * @Route("/userObservations", name="userObservations")
+     */
+    public function showUserObservations()
+    {
+        return $this->render('@App/WebController/userObservation.html.twig', array(
         ));
     }
 }
