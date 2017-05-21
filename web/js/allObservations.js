@@ -1,5 +1,31 @@
 $(document).ready(function () {
 
+    function loadColorMap() {
+        $.getJSON(assetsBaseDir + "voivodeship.geojson", function (hoodData) {
+            $.each(hoodData.features, function (index, value) {
+                value['count'] = 0;
+                $.each(countsObservations, function (index2, value2) {
+                    if (value.properties.cartodb_id === value2.id) {
+                        value['count'] = value2.count;
+                    }
+                });
+            });
+            geoJsonLayer = L.geoJson(hoodData, {
+                style: function (feature) {
+                    var fillColor,
+                        density = feature.count;
+                    console.log(feature.count);
+                    if (density > 4) fillColor = "#006837";
+                    else if (density > 3) fillColor = "#31a354";
+                    else if (density > 2) fillColor = "#78c679";
+                    else if (density > 1) fillColor = "#c2e699";
+                    else if (density > 0) fillColor = "#ffffcc";
+                    else fillColor = "#999";  // no data
+                    return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
+                }
+            }).addTo(mymap);
+        });
+    }
     var mapBoxMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -21,6 +47,7 @@ $(document).ready(function () {
 
     // do tej warstwy będą dodawane markery
     var observedMarkers = new L.LayerGroup();
+    // zmienna do której będą zapisywane warstwy dodawane z geoJson
     var geoJsonLayer;
 
     // domyślne ustawienie wyświetlania punktów przy załadowaniu mapy
@@ -50,30 +77,7 @@ $(document).ready(function () {
 
     buttonMap2.on('change', function () {
         if ($(this).is(':checked')) {
-            $.getJSON(assetsBaseDir + "voivodeship.geojson", function (hoodData) {
-                $.each(hoodData.features, function (index, value) {
-                    value['count'] = 0;
-                    $.each(countsObservations, function (index2, value2) {
-                        if (value.properties.cartodb_id === value2.id) {
-                            value['count'] = value2.count;
-                        }
-                    });
-                });
-                geoJsonLayer = L.geoJson(hoodData, {
-                    style: function (feature) {
-                        var fillColor,
-                            density = feature.count;
-                        console.log(feature.count);
-                        if (density > 4) fillColor = "#006837";
-                        else if (density > 3) fillColor = "#31a354";
-                        else if (density > 2) fillColor = "#78c679";
-                        else if (density > 1) fillColor = "#c2e699";
-                        else if (density > 0) fillColor = "#ffffcc";
-                        else fillColor = "#f7f7f7";  // no data
-                        return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
-                    }
-                }).addTo(mymap);
-            });
+            loadColorMap();
         };
     });
 
@@ -101,18 +105,7 @@ $(document).ready(function () {
             marker.addTo(observedMarkers);
         });
 
-        var requestCountObservations;
-
-        requestCountObservations = $.ajax({
-            url: "/api/observationCount",
-            type: "get",
-            dataType: "json"
-        });
-
-        requestCountObservations.done(function (response) {
-            countsObservations = response;
-        });
-
+        countsObservations = response.counts;
     });
 
     $('#userSearch').on('click', function (e) {
@@ -172,6 +165,15 @@ $(document).ready(function () {
                     });
                     marker.addTo(observedMarkers);
                 });
+
+                countsObservations = response.counts;
+                if (buttonMap1.is(':checked')) {
+                    geoJsonLayer.clearLayers();
+                }
+
+                if (buttonMap2.is(':checked')) {
+                    loadColorMap();
+                }
             }
         });
     });

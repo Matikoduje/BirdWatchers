@@ -47,28 +47,18 @@ class ObservationController extends Controller
      */
     public function listObservationsAction()
     {
-        $observations = $this->getDoctrine()
-            ->getRepository('AppBundle:Observation')
-            ->findAll();
-        $data = array('observations' => array());
+        $observationRepository = $this->getDoctrine()
+            ->getRepository('AppBundle:Observation');
+        $observations = $observationRepository->findAll();
+        $observationsCounts = $observationRepository->countAllObservations();
+        $data = array(
+            'observations' => array(),
+            'counts' => array());
         foreach ($observations as $observation) {
             $data['observations'][] = $this->serializeObservations($observation);
         }
-        $response = new JsonResponse($data, 200);
-        return $response;
-    }
-
-    /**
-     * @Route("/api/observationCount")
-     * @Method("GET")
-     */
-    public function listObservationsCountAction()
-    {
-        $observationRepository = $this->getDoctrine()->getRepository('AppBundle:Observation');
-        $observationCounts = $observationRepository->countAllObservations();
-        $data = array();
-        foreach ($observationCounts as $observationCount) {
-            $data[] = $this->serializeCounts($observationCount);
+        foreach ($observationsCounts as $observationCount) {
+            $data['counts'][] = $this->serializeCounts($observationCount);
         }
         $response = new JsonResponse($data, 200);
         return $response;
@@ -275,9 +265,15 @@ class ObservationController extends Controller
 
         if ($isUserExist) {
             $observations = $repositoryObservation->findByParameters($user, $species, $time);
-            $data = array('observations' => array());
+            $observationsCounts = $repositoryObservation->countFindByParameters($user, $species, $time);
+            $data = array(
+                'observations' => array(),
+                'counts' => array());
             foreach ($observations as $observation) {
                 $data['observations'][] = $this->serializeObservations($observation);
+            }
+            foreach ($observationsCounts as $observationCount) {
+                $data['counts'][] = $this->serializeCounts($observationCount);
             }
         }
         $response = new JsonResponse($data, 200);
