@@ -77,4 +77,15 @@ class ObservationRepository extends EntityRepository
 
         return $q->getResult();
     }
+
+    public function countAllObservations()
+    {
+        $q = $this->createQueryBuilder('observation')
+            ->select('count(observation.id)')
+            ->join('observation.state', 'state')
+            ->addSelect('state.name')
+            ->groupBy('observation.state')
+            ->getQuery();
+        return $q->getResult();
+    }
 }

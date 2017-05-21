@@ -59,6 +59,22 @@ class ObservationController extends Controller
     }
 
     /**
+     * @Route("/api/observationCount")
+     * @Method("GET")
+     */
+    public function listObservationsCountAction()
+    {
+        $observationRepository = $this->getDoctrine()->getRepository('AppBundle:Observation');
+        $observationCounts = $observationRepository->countAllObservations();
+        $data = array();
+        foreach ($observationCounts as $observationCount) {
+            $data[] = $this->serializeCounts($observationCount);
+        }
+        $response = new JsonResponse($data, 200);
+        return $response;
+    }
+
+    /**
      * @Route("/api/myObservations")
      * @Method("GET")
      */
@@ -133,6 +149,94 @@ class ObservationController extends Controller
             'dateO' => $observation->getObservationDate()->format('Y-m-d'),
             'location' => $observation->getLocation(),
         );
+    }
+
+
+    private function serializeCounts($observationCount)
+    {
+        switch ($observationCount['name']) {
+            case 'Małopolskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 5
+                );
+            case 'Dolnośląskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 6
+                );
+            case 'Lubelskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 7
+                );
+            case 'Opolskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 10
+                );
+            case 'Podlaskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 11
+                );
+            case 'Pomorskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 12
+                );
+            case 'Śląskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 13
+                );
+            case 'Podkarpackie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 14
+                );
+            case 'Warmińsko-mazurskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 15
+                );
+            case 'Zachodniopomorskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 16
+                );
+            case 'Świętokrzyskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 2
+                );
+            case 'Łódzkie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 1
+                );
+            case 'Wielkopolskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 3
+                );
+            case 'Kujawsko-pomorskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 4
+                );
+            case 'Lubuskie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 8
+                );
+            case 'Mazowieckie':
+                return array(
+                    'count' => $observationCount['1'],
+                    'id' => 9
+                );
+        }
+
     }
 
     /**
