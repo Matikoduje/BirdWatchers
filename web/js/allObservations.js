@@ -1,14 +1,33 @@
 $(document).ready(function () {
 
-    var mymap = L.map('mapId').setView([50.15, 19.00], 13);
+    // do tej warstwy będą dodawane markery
+    var observedMarkers = new L.LayerGroup();
 
-    L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
+    var mapBoxMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
         '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
         'Imagery © <a href="http://mapbox.com">Mapbox</a>',
         id: 'mapbox.streets'
-    }).addTo(mymap);
+    });
+
+    var mymap = L.map('mapId', {
+        layers: [mapBoxMap]
+    })
+        .setView([50.15, 19.00], 13);
+
+    // domyślne ustawienie wyświetlania punktów przy załadowaniu mapy
+    observedMarkers.addTo(mymap);
+
+    var baseLayers = {
+        "Mapa obserwacji": mapBoxMap
+    };
+
+    var overlays = {
+        "Obserwacje": observedMarkers
+    };
+
+    L.control.layers(baseLayers, overlays).addTo(mymap);
 
     var requestGet;
 
@@ -20,7 +39,6 @@ $(document).ready(function () {
 
     requestGet.done(function (response) {
 
-        var markers = [];
         $.each(response.observations, function (index, value) {
             var marker = L.marker([value.latitude, value.longitude]);
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
@@ -33,10 +51,9 @@ $(document).ready(function () {
             marker.on('click', function (e) {
                 window.location.href = "/observation/" + value.id;
             });
-            markers.push(marker);
+            marker.addTo(observedMarkers);
         });
 
-        var layerMarkers = L.layerGroup(markers).addTo(mymap);
 
     });
 
@@ -80,14 +97,9 @@ $(document).ready(function () {
                if (!$('#infoUser').hasClass('invisible')) {
                    $('#infoUser').addClass('invisible');
                }
-
-               mymap.eachLayer(function (layer) {
-                   if (layer._leaflet_id >= 43) {
-                       mymap.removeLayer(layer);
-                   }
-               });
-
-               var markers = [];
+               // czyścimy warstwę z uprzednio załadowanych markerów zanim dodamy następne
+               observedMarkers.clearLayers();
+               
                $.each(response.observations, function (index, value) {
                    var marker = L.marker([value.latitude, value.longitude]);
                    marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
@@ -100,10 +112,8 @@ $(document).ready(function () {
                    marker.on('click', function (e) {
                        window.location.href = "/observation/" + value.id;
                    });
-                   markers.push(marker);
+                   marker.addTo(observedMarkers);
                });
-
-               var layerMarkers = L.layerGroup(markers).addTo(mymap);
            }
         });
     });
