@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -49,22 +50,7 @@ class UserProfile
 
     /**
      * @ORM\Column(type="string", nullable=true, length=255)
-     * @Assert\File(
-     *     mimeTypes= { "image/jpeg" },
-     *     mimeTypesMessage= "Zdjęcie musi być w formacie jpeg",
-     *     maxSize= "300k",
-     *     maxSizeMessage= " Zdjęcie powinno być mniejsze niż 300 kb"
-     * )
-     * @Assert\Image(
-     *     minWidth = 160,
-     *     maxWidth = 180,
-     *     minHeight = 160,
-     *     maxHeight = 180,
-     *     minWidthMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
-     *     maxWidthMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
-     *     minHeightMessage = "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180",
-     *     maxHeightMessage= "Rozmiar zdjęcia musi mieścić się od 160x160 do 180x180"
-     * )
+     *
      */
     private $profilePicture;
 
@@ -171,4 +157,45 @@ class UserProfile
     {
         return $this->state;
     }
+
+    private $uploadFile;
+
+    /**
+     * @return mixed
+     */
+    public function getUploadFile()
+    {
+        return $this->uploadFile;
+    }
+
+    /**
+     * @param mixed $file
+     */
+    public function setUploadFile(UploadedFile $file = null)
+    {
+        $this->uploadFile = $file;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPath()
+    {
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
+    }
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $path;
+
+
 }

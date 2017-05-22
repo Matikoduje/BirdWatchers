@@ -11,6 +11,7 @@ use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,15 +57,22 @@ class UserController extends Controller
     public function updateUserProfileAction(Request $request)
     {
         $userProfile = $this->getUser()->getUserProfile();
+        if ($userProfile->getProfilePicture() != null) {
+            $userProfile->setUploadFile(
+                new File($this->getParameter('images_directory') . $userProfile->getPath() . $userProfile->getProfilePicture())
+            );
+        }
         $form = $this->createForm(UserProfileType::class, $userProfile);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            if ($post->getProfilePicture()) {
-                $file = $post->getProfilePicture();
+            if ($post->getFile()) {
+                $file = $post->getUploadFile();
                 $filename = $this->get('app.image_uploader')->upload($file);
+                $filePath = $this->get('app.image_uploader')->getTargetDir();
                 $post->setProfilePicture($filename);
+                $post->setPath((substr($filePath,-11)) . '/');
             }
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);

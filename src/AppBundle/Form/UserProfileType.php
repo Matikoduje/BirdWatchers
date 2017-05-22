@@ -3,6 +3,7 @@
 namespace AppBundle\Form;
 
 
+use AppBundle\Entity\UserProfile;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -10,9 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\Image;
-use Symfony\Component\Validator\Constraints\Length;
 
 class UserProfileType extends AbstractType
 {
@@ -24,7 +23,7 @@ class UserProfileType extends AbstractType
                 'required' => false
             ))
             ->add('surname', TextType::class, array(
-                'label' => 'Imię',
+                'label' => 'Nazwisko',
                 'required' => false
             ))
             ->add('city', TextType::class, array(
@@ -37,13 +36,28 @@ class UserProfileType extends AbstractType
                 'class' => 'AppBundle\Entity\State',
                 'choice_label' => 'name'
             ))
-            ->add('profilePicture', FileType::class, array(
+            ->add('uploadFile', FileType::class, array(
                 'label' => 'Dodaj zdjęcie profilowe',
                 'required' => false,
-                'data_class' => null,
+                'constraints' => array(
+                    new Image(array(
+                        'maxSize' => '300k',
+                        'maxSizeMessage' => 'Zdjęcie nie może być większe niż 300kb',
+                        'minHeight' => 160,
+                        'minWidth' => 160,
+                        'minWidthMessage' => 'Zdjęcie musi mieć większą rozdzielczość niż 160x160 px',
+                        'minHeightMessage' => 'Zdjęcie musi mieć większą rozdzielczość niż 160x160 px',
+                        'maxHeight' => 300,
+                        'maxWidth' => 300,
+                        'maxWidthMessage' => 'Zdjęcie musi mieć mniejszą rozdzielczość niż 200x200 px',
+                        'maxHeightMessage' => 'Zdjęcie musi mieć mniejszą rozdzielczość niż 200x200 px',
+                        'mimeTypes' => 'image/jpeg',
+                        'mimeTypesMessage' => 'Zdjęcie musi być w formacie jpeg'
+                    ))
+                )
             ))
             ->add('save', SubmitType::class, array(
-               'label' => 'Zapisz',
+                'label' => 'Zapisz',
             ));
     }
 
@@ -55,7 +69,7 @@ class UserProfileType extends AbstractType
     public function setDefaultOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'AppBundle\Entity\UserProfile'
+            'data_class' => UserProfile::class
         ));
     }
 }
