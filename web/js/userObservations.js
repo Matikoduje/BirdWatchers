@@ -34,10 +34,45 @@ $(document).ready(function () {
                 window.location.href = "/observation/" + value.id;
             });
 
-            var li = $('<li class="list-group-item list-group-item-success">' + value.species + ', ' + value.location + ', ' + value.dateO + '</li>');
+            var li = $('<li class="list-group-item list-group-item-success" data-lat=' + value.latitude + ' data-lon=' + value.longitude + ' data-id=' + value.id + '>' + value.species + ', ' + value.location + ', ' + value.dateO + '</li>');
             observationList.append(li);
         });
 
     });
 
+    $('body').on('click', '.list-group-item', function () {
+
+        var contentLi = '<p id="contentP"><button type="button" class="btn btn-xs btn-info" id="editBtn">Edytuj</button><button class="btn btn-xs btn-danger" id="deleteBtn" type="button">Usuń</button> </p>';
+
+        if ($(this).hasClass('active')) {
+            $(this).removeClass('active');
+            $('#contentP').remove();
+        } else {
+            $('.list-group-item').removeClass('active');
+            $('#contentP').remove();
+            $(this).addClass('active');
+            mymap.panTo(new L.LatLng($(this).data('lat'), $(this).data('lon')));
+        }
+        if ($(this).hasClass('active')) {
+            $(this).append(contentLi);
+        }
+
+    });
+
+    $('body').on('click', '#deleteBtn', function () {
+
+        var $requestDel;
+        var id = $(this).parent().parent().data("id");
+        console.log(id);
+
+        $requestDel = $.ajax({
+            url: "/api/observation/" + id,
+            type: "delete",
+            dataType: "json"
+        });
+
+        $requestDel.done(function () {
+            window.location.href = "/userObservations";
+        });
+    });
 });

@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,9 +101,15 @@ class ObservationController extends Controller
         }
 
         if ($observation) {
-            $em = $this->getDoctrine()->getManager();
-            $em->remove($observation);
-            $em->flush();
+            if ($observation->getUser() === $this->getUser()) {
+                $em = $this->getDoctrine()->getManager();
+                $images = $observation->getImages();
+                foreach ($images as $image) {
+                    $em->remove($image);
+                }
+                $em->remove($observation);
+                $em->flush();
+            }
         }
 
         return new Response(null, 204);
