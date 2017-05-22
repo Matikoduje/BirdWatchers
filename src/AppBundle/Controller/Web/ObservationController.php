@@ -92,4 +92,20 @@ class ObservationController extends Controller
         return $this->render('@App/WebController/userObservation.html.twig', array(
         ));
     }
+
+    /**
+     * @Route("/observation/edit/{id}", name="editObservation")
+     */
+    public function editObservationAction(Request $request, $id)
+    {
+        $observation = $this->getDoctrine()->getRepository('AppBundle:Observation')
+            ->find($id);
+        if ($observation->getUser() === $this->getUser()) {
+            $form = $this->createForm(ObservationType::class, $observation);
+            $form->handleRequest($request);
+            return $this->render('AppBundle:WebController:add.html.twig', array(
+                'form' => $form->createView()
+            ));
+        }
+    }
 }

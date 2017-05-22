@@ -63,7 +63,6 @@ $(document).ready(function () {
 
         var $requestDel;
         var id = $(this).parent().parent().data("id");
-        console.log(id);
 
         $requestDel = $.ajax({
             url: "/api/observation/" + id,
@@ -74,5 +73,10 @@ $(document).ready(function () {
         $requestDel.done(function () {
             window.location.href = "/userObservations";
         });
+    });
+
+    $('body').on('click', '#editBtn', function () {
+        var id = $(this).parent().parent().data("id");
+        window.location.href = "/observation/edit/" + id;
     });
 });
