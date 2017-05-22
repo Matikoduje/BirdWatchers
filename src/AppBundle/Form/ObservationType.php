@@ -30,6 +30,7 @@ class ObservationType extends AbstractType
                 'required' => true
             ))
             ->add('observationDate', DateType::class, array(
+                'label' => 'Data dokonania obserwacji',
                 'widget' => 'choice',
                 'required' => true
             ))

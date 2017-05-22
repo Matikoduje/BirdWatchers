@@ -41,6 +41,16 @@ $(document).ready(function () {
         }
     }
 
+    function getCurrentDate() {
+        var year = $('#observation_observationDate_year');
+        var month = $('#observation_observationDate_month');
+        var day = $('#observation_observationDate_day');
+
+        year.val(new Date().getFullYear());
+        month.val(new Date().getMonth() + 1);
+        day.val(new Date().getDate());
+    }
+
     var mymap = L.map('mapId').setView([50.15, 19.00], 13),
         geocoder = L.Control.Geocoder.mapzen('search-DopSHJw'),
         control = L.Control.geocoder({
@@ -63,4 +73,5 @@ $(document).ready(function () {
         })
     });
 
+    getCurrentDate();
 });
