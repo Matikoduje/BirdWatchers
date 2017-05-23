@@ -44,12 +44,33 @@ class Species
     private $family;
 
     /**
+     * @return mixed
+     */
+    public function getMainImage()
+    {
+        return $this->mainImage;
+    }
+
+    /**
+     * @param mixed $mainImage
+     */
+    public function setMainImage($mainImage)
+    {
+        $this->mainImage = $mainImage;
+    }
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $mainImage;
+
+    /**
      * @ORM\Column(type="string")
      */
     private $speciesOrder;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="text")
      */
     private $description;
 

@@ -1,39 +1,39 @@
 AppBundle\Entity\UserProfile:
     userProfile0:
+    userProfile1:
+    userProfile2:
 AppBundle\Entity\State:
     state0:
-        name: --------
-    state1:
         name: Śląskie
-    state2:
+    state1:
         name: Małopolskie
-    state3:
+    state2:
         name: Opolskie
-    state4:
+    state3:
         name: Dolnośląskie
-    state5:
+    state4:
         name: Lubuskie
-    state6:
+    state5:
         name: Wielkopolskie
-    state7:
+    state6:
         name: Mazowieckie
-    state8:
+    state7:
         name: Łódzkie
-    state9:
+    state8:
         name: Świętokrzyskie
-    state10:
+    state9:
         name: Zachodniopomorskie
-    state11:
+    state10:
         name: Kujawsko-pomorskie
-    state12:
+    state11:
         name: Podkarpackie
-    state13:
+    state12:
         name: Lubelskie
-    state14:
+    state13:
         name: Podlaskie
-    state15:
+    state14:
         name: Warmińsko-mazurskie
-    state16:
+    state15:
         name: Pomorskie
 AppBundle\Entity\User:
     user0:
@@ -43,12 +43,61 @@ AppBundle\Entity\User:
         roles: ['ROLE_USER']
         is_baned: 0
         user_profile: '@userProfile0'
+    user1:
+        login: admin1
+        email: admin1@onet.pl
+        plainPassword: admin
+        roles: ['ROLE_USER']
+        is_baned: 0
+        user_profile: '@userProfile1'
+    user2:
+        login: admin2
+        email: admin2@onet.pl
+        plainPassword: admin
+        roles: ['ROLE_USER']
+        is_baned: 0
+        user_profile: '@userProfile2'
 AppBundle\Entity\Species:
     species0:
-        speciesOrder: Ciconiformes
-        description: Bociek
         name: Bocian Bialy
         latinName: Ciconia Ciconia
-        family: Ciconidae
-
+        family: Ciconiidae
+        speciesOrder: Ciconiiformes
+        description: 'Długość ciała: 100-115 cm. Powszechnie znany i lubiany ptak o białym upierzeniu z czarnymi lotkami oraz długimi czerwonymi nogami i dziobem. W Polsce zamieszkuje co czwarty bocian na świecie. Bociany budują jedne z największych gniazd mogących osiągać do 2 m wysokości i 1,5 m średnicy. Czasem gniazduje kolonijnie, natomiast rzadko z dala od osad ludzkich.'
+        mainImage: images/mainSpecies/Ciconia_Ciconia.jpg
+    species1:
+        name: Bocian Czarny
+        latinName: Ciconia Nigra
+        family: Ciconiidae
+        speciesOrder: Ciconiiformes
+        description: 'Długość ciała: 95-100 cm. Nieco mniejszy od bociana białego. Ubarwienie czarne z metalicznym połyskiem, brzuch biały. Dziób, naga skóra wokół oczu i nogi czerwone. W odróżnieniu od swego krewniaka bocian czarny uważany jest za skrytego ptaka leśnego, raczej unikającego kontaktów z człowiekiem. Ostatnio zmienia swe zwyczaje i zaczyna gnieździć się coraz bliżej osad ludzkich, nawet w niewielkich lasach.'
+        mainImage: images/mainSpecies/Ciconia_Nigra.jpg
+    species2:
+        name: Kraska Zwyczajna
+        latinName: Coracias Garrulus
+        family: Coraciidae
+        speciesOrder: Coraciiformes
+        description: 'Długość ciała: 30-35 cm. Jeden z naszych najładniejszych ptaków, wielkości gołębia. W locie z daleka przypomina sylwetką wronę, ale ma smuklejszy korpus i zaokrąglone skrzydła. Ubarwienie niebieskie w różnych odcieniach, grzbiet rdzawobrązowy, lotki czarne. Dziób czarniawy, nogi żółtawe. Jeszcze 20-30 lat temu kraska występowała na znacznym obszarze kraju, ale zaczęła gwałtownie wycofywać się z zachodniej części kraju, gdzie obecnie nie występuje. Spadek liczebności postępuje z każdym rokiem i krasce grozi całkowite wyginięcie.'
+        mainImage: images/mainSpecies/Coracias_Garrulus.jpg
+    species3:
+        name: Żołna Zwyczajna
+        latinName: Merops apiaster
+        family: Meropidae
+        speciesOrder: Coraciiformes
+        description: 'Długość ciała: 24-30 cm. Jeden z naszych najbarwniejszych ptaków o smukłej sylwetce z zaostrzonymi skrzydłami. Ubarwienie wierzchu jest złożone z barw brązowych, żółtych i zielononiebieskich. Spód ciała błękitny z wyjątkiem żółtego gardła. Żołny rzucają się w oczy nie tylko swoim egzotycznym wyglądem, ale także swoim zachowaniem, gdyż chętnie przesiaduje na eksponowanych miejscach, gdzie czatuje na przelatujące owady i ściga je zwinnym lotem.'
+        mainImage: images/mainSpecies/Merops_Apiaster.jpg
+    species4:
+        name: Orzeł Przedni
+        latinName: Aquila chrysaetos
+        family: Jastrzębiowate (Accipitridae)
+        speciesOrder: Szponiaste (Accipitriformes)
+        description: 'Długość ciała: 76-93 cm. Nasz największy orzeł z rodzaju Aquila, wielkością ustępujący tylko bielikowi. Sylwetka smukła z długimi skrzydłami i dość długim ogonem. Ubarwienie dorosłych ptaków brunatne, upstrzone jaśniejszymi piórami na wierzchu, z rdzawobrązową grzywą na głowie i karku. Młode ptaki różnią się białymi plamami na spodzie skrzydeł i białą nasadą ogona. Podczas krążenia trzyma skrzydła uniesione w kształcie płytkiego V.'
+        mainImage: images/mainSpecies/Aquila_Chrysaetos.jpg
+    species5:
+        name: Bielik Zwyczajny
+        latinName: Haliaaetus Albicilla
+        family: Jastrzębiowate (Accipitridae)
+        speciesOrder: Szponiaste (Accipitriformes)
+        description: 'Długość ciała: 80-90 cm. Największy krajowy ptak drapieżny o rozpiętości skrzydeł sięgającej 240 cm. Dorosły ptak ubarwiony brunatno z rozjaśnioną głową i ramionami oraz krótkim, białym ogonem. Dziób żółty, potężny, a mocne nogi mają nieopierzone skoki. Młody jest brunatny o łaciatym upierzeniu z ciemnym dziobem i ogonem, które jaśnieją z wiekiem i osiągają ubarwienie dorosłych po 4-5 latach. Bieliki budują jedne z największych gniazd spośród wszystkich ptaków. Używane przez wiele lat gniazdo może przekraczać 2 m wysokości i osiągać ciężar nawet jednej tony. Dzięki ochronie miejsc gniazdowania bielik przestał być w naszym kraju rzadkością i jego liczebność systematycznie wzrasta.'
+        mainImage: images/mainSpecies/Haliaaetus_Albicilla.jpg
 

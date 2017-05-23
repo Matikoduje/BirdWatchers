@@ -1,0 +1,33 @@
+{% extends "::base.html.twig" %}
+{% block title %}
+    {{ species.name }}
+{% endblock %}
+{% block container %}
+    <div class="col-lg-6">
+        <div class="row" style="height: 50vh;">
+        <img style="max-height: 100%; max-width: 100%" src= {{ asset('' ~ species.mainImage ~ '') }} />
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div style="font-size: 110%">
+            <p>
+                <span><b>Gatunek:</b> {{ species.name }}</span>
+            </p>
+            <p>
+                <span><b>Nazwa łacińska:</b> {{ species.latinName }}</span>
+            </p>
+            <p>
+                <span><b>Rodzina:</b> {{ species.family }}</span>
+            </p>
+            <p>
+                <span><b>Rząd:</b> {{ species.speciesOrder }}</span>
+            </p>
+            <p>
+                <span><b>Opis:</b> {{ species.description }}</span>
+            </p>
+            <p>
+                <span><b>Ilość obserwacji w serwisie:</b> {{ countSpeciesObservation }}</span>
+            </p>
+        </div>
+    </div>
+{% endblock %}

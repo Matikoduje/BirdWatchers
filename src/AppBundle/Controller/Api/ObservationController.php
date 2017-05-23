@@ -132,7 +132,8 @@ class ObservationController extends Controller
             'species' => $observation->getSpecies()->getName(),
             'state' => $observation->getState()->getName(),
             'location' => $observation->getLocation(),
-            'images' => $imgPath
+            'images' => $imgPath,
+            'speciesId' => $observation->getSpecies()->getId()
         );
     }
 

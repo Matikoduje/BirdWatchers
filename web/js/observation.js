@@ -28,7 +28,7 @@ $(document).ready(function () {
         $('#observationUsername').html(response.userName);
         $('#observationCreateDate').html(response.dateCreate);
         $('#observationDate').html(response.dateO);
-        $('#observationSpecies').html(response.species);
+        $('#observationSpecies').html('<a href=/species/' + response.speciesId + '>' + response.species + '</a>');
         $('#observationLocation').html(response.location);
         $('#observationState').html(response.state);
         $('#observationDescription').html(response.description);

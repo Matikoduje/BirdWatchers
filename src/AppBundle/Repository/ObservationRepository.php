@@ -151,4 +151,14 @@ class ObservationRepository extends EntityRepository
 
         return $time;
     }
+
+    public function countSpeciesObservations($id)
+    {
+        $q = $this->createQueryBuilder('observation')
+            ->select('count(observation.id)')
+            ->where('observation.species = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+        return $q->getSingleScalarResult();
+    }
 }

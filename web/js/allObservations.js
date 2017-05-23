@@ -46,7 +46,7 @@ $(document).ready(function () {
 
     // do tej warstwy będą dodawane markery
     var observedMarkers = new L.LayerGroup();
-
+    // warstwa odpowiedzialna za wizualną prezentację markerów
     var markerCluster = new L.markerClusterGroup();
 
     // zmienna do której będą zapisywane warstwy dodawane z geoJson
