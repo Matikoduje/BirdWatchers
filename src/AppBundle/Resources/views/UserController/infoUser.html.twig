@@ -1,0 +1,38 @@
+{% extends "::base.html.twig" %}
+{% block title %}
+    Użytkownik: {{ login }}
+{% endblock %}
+{% block container %}
+    <div class="col-lg-4 col-lg-offset-4" style="font-size: 110%">
+        <div class="row">
+            <div class="col-lg-2"></div>
+            <div class="col-lg-4" style="height: 90px;">
+                <img style="max-height: 90px; max-width: 110px" src= {{ asset('uploads/images' ~ path ~ '') }} />
+            </div>
+            <div class="col-lg-4" style="height: 90px;">
+                <br>
+                <p>
+                    <span><b>Login:</b> {{ login }} </span>
+                </p>
+            </div>
+            <div class="col-lg-2"></div>
+        </div>
+        <div class="col-lg-12" style="text-align: center">
+            <p>
+                <span><b>Imię:</b> {{ name }} </span>
+            </p>
+            <p>
+                <span><b>Nazwisko:</b> {{ surname }} </span>
+            </p>
+            <p>
+                <span><b>Miejscowość:</b> {{ city }} </span>
+            </p>
+            <p>
+                <span><b>Województwo:</b> {{ state }} </span>
+            </p>
+            <p>
+                <span><b>Ilość obserwacji w serwisie:</b> {{ count }} </span>
+            </p>
+        </div>
+    </div>
+{% endblock %}

@@ -66,6 +66,11 @@ $(document).ready(function () {
 
     L.control.layers(baseLayers, overlays).addTo(mymap);
 
+    var birdIcon = L.icon({
+        iconUrl: assetsImgDir + 'bird_marker.png',
+        iconSize: [50,40]
+    });
+
     var countsObservations;
 
     var buttonMap1 = $('.leaflet-control-layers-base label:nth-child(1) input:radio');
@@ -93,7 +98,7 @@ $(document).ready(function () {
 
     requestObservation.done(function (response) {
         $.each(response.observations, function (index, value) {
-            var marker = L.marker([value.latitude, value.longitude]);
+            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
             marker.on('mouseover', function (e) {
                 this.openPopup();
@@ -157,7 +162,7 @@ $(document).ready(function () {
                 observedMarkers.clearLayers();
 
                 $.each(response.observations, function (index, value) {
-                    var marker = L.marker([value.latitude, value.longitude]);
+                    var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
                     marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
                     marker.on('mouseover', function (e) {
                         this.openPopup();

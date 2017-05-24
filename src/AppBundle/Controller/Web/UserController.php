@@ -57,23 +57,18 @@ class UserController extends Controller
     public function updateUserProfileAction(Request $request)
     {
         $userProfile = $this->getUser()->getUserProfile();
-        if ($userProfile->getProfilePicture() != null) {
-            $userProfile->setUploadFile(
-                new File($this->getParameter('images_directory') . $userProfile->getPath() . $userProfile->getProfilePicture())
-            );
-        }
         $form = $this->createForm(UserProfileType::class, $userProfile);
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            if ($post->getFile()) {
+            if ($post->getUploadFile()) {
                 $file = $post->getUploadFile();
                 $filename = $this->get('app.image_uploader')->upload($file);
                 $filePath = $this->get('app.image_uploader')->getTargetDir();
                 $post->setProfilePicture($filename);
-                $post->setPath((substr($filePath,-11)) . '/');
+                $post->setPath((substr($filePath, -11).'/'));
             }
+            $post->setUploadFile(null);
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
@@ -111,6 +106,28 @@ class UserController extends Controller
         return $this->render('AppBundle:UserController:changeUser.html.twig', array(
             'formEmail' => $formEmail->createView(),
             'formPassword' => $formPassword->createView()
+        ));
+    }
+
+    /**
+     * @Route("/showUser/{login}",
+     *     name="showUser")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function showUserInformation($login)
+    {
+        $user = $this->getDoctrine()->getRepository('AppBundle:User')
+            ->findOneByLogin($login);
+        $count = $this->getDoctrine()->getRepository('AppBundle:Observation')
+            ->countUserObservations($user->getId());
+        return $this->render('AppBundle:UserController:infoUser.html.twig', array(
+            'login' => $user->getLogin(),
+            'name' => $user->getUserProfile()->getName(),
+            'surname' => $user->getUserProfile()->getSurname(),
+            'city' => $user->getUserProfile()->getCity(),
+            'state' => $user->getUserProfile()->getState()->getName(),
+            'count' => $count,
+            'path' => $user->getUserProfile()->getPath() . $user->getUserProfile()->getProfilePicture()
         ));
     }
 }

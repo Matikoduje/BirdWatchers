@@ -5,6 +5,11 @@ $(document).ready(function () {
         return path;
     };
 
+    var birdIcon = L.icon({
+        iconUrl: assetsImgDir + 'bird_marker.png',
+        iconSize: [50,40]
+    });
+
     var $requestGet;
 
     $requestGet = $.ajax({
@@ -24,8 +29,8 @@ $(document).ready(function () {
             id: 'mapbox.streets'
         }).addTo(mymap);
 
-        var marker = L.marker([response.latitude, response.longitude]).addTo(mymap);
-        $('#observationUsername').html(response.userName);
+        var marker = L.marker([response.latitude, response.longitude], {icon: birdIcon}).addTo(mymap);
+        $('#observationUsername').html('<a href=/showUser/' + response.userName + '>' + response.userName + '</a>');
         $('#observationCreateDate').html(response.dateCreate);
         $('#observationDate').html(response.dateO);
         $('#observationSpecies').html('<a href=/species/' + response.speciesId + '>' + response.species + '</a>');
@@ -44,8 +49,5 @@ $(document).ready(function () {
                 imagesId.append('<div class="col-lg-4"><img style="max-height: 100%; max-width: 100%" src=/uploads/images' + response.images[i] + ' /></div>');
             }
         }
-
     });
-
-
 });

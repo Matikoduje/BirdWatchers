@@ -1,6 +1,5 @@
 $(document).ready(function () {
     function getLatitudeLongitude(latlng) {
-        console.log(latlng);
         var array;
         var lat;
         var lng;
@@ -13,11 +12,16 @@ $(document).ready(function () {
     };
 
     function getGeodata(result,e) {
+
         var country = result.properties.country;
         var locality = result.properties.locality;
         var name = result.properties.name;
         var state = result.properties.region;
         var observationState = $('#observation_state option');
+
+        if (typeof(e.latlng) === 'undefined') {
+            e.latlng = e.center;
+        }
 
         if (country !== 'Poland') {
             var popup = L.popup().setLatLng(e.latlng).setContent('Proszę o wskazanie miejsca znajdującego się w Polsce').openOn(mymap);
@@ -54,9 +58,12 @@ $(document).ready(function () {
     var mymap = L.map('mapId').setView([50.15, 19.00], 13),
         geocoder = L.Control.Geocoder.mapzen('search-DopSHJw'),
         control = L.Control.geocoder({
-            geocoder: geocoder
-        }).addTo(mymap),
-        marker;
+            geocoder: geocoder,
+            defaultMarkGeocode: false,
+            placeholder: 'Wyszukaj...'
+        }).addTo(mymap);
+
+    var marker;
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -66,7 +73,28 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
+    control.on('markgeocode', function (e) {
+
+        if (typeof(marker) === 'undefined') {
+            marker = new L.marker(e.geocode.center);
+            marker.addTo(mymap);
+        }
+        else {
+            marker.setLatLng(e.geocode.center);
+        }
+
+        mymap.panTo(new L.LatLng(e.geocode.center.lat, e.geocode.center.lng));
+        getGeodata(e.geocode, e.geocode);
+    });
+
     mymap.on('click', function (e) {
+        if (typeof(marker) === 'undefined') {
+            marker = new L.Marker(e.latlng);
+            marker.addTo(mymap);
+        }
+        else {
+            marker.setLatLng(e.latlng);
+        }
         geocoder.reverse(e.latlng, mymap.options.crs.scale(mymap.getZoom()), function(results) {
             var r = results[0];
             getGeodata(r,e);

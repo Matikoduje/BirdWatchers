@@ -19,7 +19,7 @@ class UserProfileType extends AbstractType
     {
         $builder
             ->add('name', TextType::class, array(
-                'label' => 'Imię',
+                'label' => 'Imię:',
                 'required' => false
             ))
             ->add('surname', TextType::class, array(

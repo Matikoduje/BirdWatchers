@@ -12,6 +12,11 @@ $(document).ready(function () {
 
     var $requestGet;
 
+    var birdIcon = L.icon({
+        iconUrl: assetsImgDir + 'bird_marker.png',
+        iconSize: [50,40]
+    });
+
     $requestGet = $.ajax({
         url: "/api/myObservations",
         type: "get",
@@ -22,7 +27,7 @@ $(document).ready(function () {
         var observationList = $('#userObservations');
 
         $.each(response.observations, function (index, value) {
-            var marker = L.marker([value.latitude, value.longitude]).addTo(mymap);
+            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon}).addTo(mymap);
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
             marker.on('mouseover', function (e) {
                 this.openPopup();

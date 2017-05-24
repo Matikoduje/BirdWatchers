@@ -161,4 +161,14 @@ class ObservationRepository extends EntityRepository
             ->getQuery();
         return $q->getSingleScalarResult();
     }
+
+    public function countUserObservations($id)
+    {
+        $q = $this->createQueryBuilder('observation')
+            ->select('count(observation.id)')
+            ->where('observation.user = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+        return $q->getSingleScalarResult();
+    }
 }

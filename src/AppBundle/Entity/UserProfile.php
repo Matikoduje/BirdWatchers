@@ -171,7 +171,7 @@ class UserProfile
     /**
      * @param mixed $file
      */
-    public function setUploadFile(UploadedFile $file = null)
+    public function setUploadFile($file = null)
     {
         $this->uploadFile = $file;
     }
@@ -196,6 +196,5 @@ class UserProfile
      * @ORM\Column(type="string", nullable=true)
      */
     private $path;
-
 
 }
