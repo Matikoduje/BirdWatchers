@@ -1,17 +1,17 @@
-$(document).ready(function () {
+$(document).ready(() => {
 
-    function getDataColorMap() {
-        $.getJSON(assetsBaseDir + "voivodeship.geojson", function (hoodData) {
-            $.each(hoodData.features, function (index, value) {
+    var getDataColorMap = () => {
+        $.getJSON(assetsBaseDir + "voivodeship.geojson", (hoodData) => {
+            $.each(hoodData.features, (index, value) => {
                 value['count'] = 0;
-                $.each(countsObservations, function (index2, value2) {
+                $.each(countsObservations, (index2, value2) => {
                     if (value.properties.cartodb_id === value2.id) {
                         value['count'] = value2.count;
                     }
                 });
             });
             geoJsonLayer = L.geoJson(hoodData, {
-                style: function (feature) {
+                style: (feature) => {
                     var fillColor,
                         density = feature.count;
                     if (density > 11) fillColor = "#006837";
@@ -24,7 +24,9 @@ $(document).ready(function () {
                 }
             }).addTo(mymap);
         });
-    }
+    };
+
+
     var mapBoxMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
         attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
@@ -41,8 +43,7 @@ $(document).ready(function () {
 
     var mymap = L.map('mapId', {
         layers: [mapBoxMap]
-    })
-        .setView([50.15, 19.00], 13);
+    }).setView([50.15, 19.00], 13);
 
     // do tej warstwy będą dodawane markery
     var observedMarkers = new L.LayerGroup();
@@ -66,7 +67,7 @@ $(document).ready(function () {
 
     L.control.layers(baseLayers, overlays).addTo(mymap);
 
-    var birdIcon = L.icon({
+    const birdIcon = L.icon({
         iconUrl: assetsImgDir + 'bird_marker.png',
         iconSize: [50,40]
     });
@@ -76,60 +77,51 @@ $(document).ready(function () {
     var buttonMap1 = $('.leaflet-control-layers-base label:nth-child(1) input:radio');
     var buttonMap2 = $('.leaflet-control-layers-base label:nth-child(2) input:radio');
 
-    buttonMap1.on('change', function () {
+    $.get("/api/observation", () => {
+    }).done((response) => {
+        $.each(response.observations, (index, value) => {
+            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
+            marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
+            marker.on('mouseover', () => {
+                this.openPopup();
+            });
+            marker.on('mouseout', () => {
+                this.closePopup();
+            });
+            marker.on('click', () => {
+                window.location.href = "/observation/" + value.id;
+            });
+            marker.addTo(observedMarkers);
+        });
+        markerCluster.addLayer(observedMarkers);
+        countsObservations = response.counts;
+    });
+
+    buttonMap1.on('change', () => {
         if ($(this).is(':checked')) {
             geoJsonLayer.clearLayers();
         }
     });
 
-    buttonMap2.on('change', function () {
+    buttonMap2.on('change', () => {
         if ($(this).is(':checked')) {
             getDataColorMap();
         };
     });
 
-    var requestObservation;
-
-    requestObservation = $.ajax({
-        url: "/api/observation",
-        type: "get",
-        dataType: "json"
-    });
-
-    requestObservation.done(function (response) {
-        $.each(response.observations, function (index, value) {
-            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
-            marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
-            marker.on('mouseover', function (e) {
-                this.openPopup();
-            });
-            marker.on('mouseout', function (e) {
-                this.closePopup();
-            });
-            marker.on('click', function (e) {
-                window.location.href = "/observation/" + value.id;
-            });
-            marker.addTo(observedMarkers);
-        });
-
-        markerCluster.addLayer(observedMarkers);
-
-        countsObservations = response.counts;
-    });
-
-    $('#userSearch').on('click', function (e) {
+    $('#userSearch').on('click', () => {
         if ($(this).prop('checked', true)) {
             $('#userVisible').removeClass('invisible');
         }
     });
 
-    $('#allUsers').on('click', function (e) {
+    $('#allUsers').on('click', () => {
         if ($(this).prop('checked', true)) {
             $('#userVisible').addClass('invisible');
         }
     });
 
-    $('#btnSearch').on('click', function () {
+    $('#btnSearch').on('click', () => {
         var requestSearch;
         var speciesId = $('#sel1').val();
         var timeAmount = $('#sel2').val();
@@ -141,14 +133,12 @@ $(document).ready(function () {
             loginUser = 'all';
         }
 
-        requestSearch = $.ajax({
-            url: "/api/searchUser",
-            type: "get",
-            data: {login: loginUser, species: speciesId, time: timeAmount},
-            dataType: "json"
-        });
-
-        requestSearch.done(function (response) {
+        $.get("/api/searchUser",{
+            login: loginUser,
+            species: speciesId,
+            time: timeAmount
+        }, () => {
+        }).done((response) => {
             if (response.message === 'badUser') {
                 if ($('#infoUser').hasClass('invisible')) {
                     $('#infoUser').removeClass('invisible');
@@ -161,16 +151,16 @@ $(document).ready(function () {
                 markerCluster.clearLayers();
                 observedMarkers.clearLayers();
 
-                $.each(response.observations, function (index, value) {
+                $.each(response.observations, (index, value) => {
                     var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
                     marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
-                    marker.on('mouseover', function (e) {
+                    marker.on('mouseover', () => {
                         this.openPopup();
                     });
-                    marker.on('mouseout', function (e) {
+                    marker.on('mouseout', () => {
                         this.closePopup();
                     });
-                    marker.on('click', function (e) {
+                    marker.on('click', () => {
                         window.location.href = "/observation/" + value.id;
                     });
                     marker.addTo(observedMarkers);

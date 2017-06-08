@@ -1,8 +1,19 @@
-$(document).ready(function () {
-    function getLatitudeLongitude(latlng) {
-        var array;
-        var lat;
-        var lng;
+$(document).ready(() => {
+
+    var getCurrentDate = () => {
+        let year = $('#observation_observationDate_year');
+        let month = $('#observation_observationDate_month');
+        let day = $('#observation_observationDate_day');
+
+        year.val(new Date().getFullYear());
+        month.val(new Date().getMonth() + 1);
+        day.val(new Date().getDate());
+    };
+
+    var getLatitudeLongitude = (latlng) => {
+        let array;
+        let lat;
+        let lng;
         array = latlng.split(',');
         lat = array[0];
         lng = array[1];
@@ -11,13 +22,12 @@ $(document).ready(function () {
         $('#observation_longitude').val(lng.substring(1, 10));
     };
 
-    function getGeodata(result,e) {
-
-        var country = result.properties.country;
-        var locality = result.properties.locality;
-        var name = result.properties.name;
-        var state = result.properties.region;
-        var observationState = $('#observation_state option');
+    var getGeodata = (result, e) => {
+        let country = result.properties.country;
+        let locality = result.properties.locality;
+        let name = result.properties.name;
+        let state = result.properties.region;
+        let observationState = $('#observation_state option');
 
         if (typeof(e.latlng) === 'undefined') {
             e.latlng = e.center;
@@ -35,7 +45,7 @@ $(document).ready(function () {
             } else {
                 $('#observation_location').val(name);
             }
-            $("#observation_state > option").each(function() {
+            $("#observation_state > option").each(() => {
                 if (this.text === 'Łódzkie' && state === 'Lódzkie') {
                     $("#observation_state option[value=" + this.value + "]").prop('selected', true);
                 } else if (this.text === state) {
@@ -43,17 +53,9 @@ $(document).ready(function () {
                 }
             });
         }
-    }
+    };
 
-    function getCurrentDate() {
-        var year = $('#observation_observationDate_year');
-        var month = $('#observation_observationDate_month');
-        var day = $('#observation_observationDate_day');
-
-        year.val(new Date().getFullYear());
-        month.val(new Date().getMonth() + 1);
-        day.val(new Date().getDate());
-    }
+    getCurrentDate();
 
     var mymap = L.map('mapId').setView([50.15, 19.00], 13),
         geocoder = L.Control.Geocoder.mapzen('search-DopSHJw'),
@@ -73,7 +75,7 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
-    control.on('markgeocode', function (e) {
+    control.on('markgeocode', (e) => {
 
         if (typeof(marker) === 'undefined') {
             marker = new L.marker(e.geocode.center);
@@ -87,7 +89,7 @@ $(document).ready(function () {
         getGeodata(e.geocode, e.geocode);
     });
 
-    mymap.on('click', function (e) {
+    mymap.on('click', (e) => {
         if (typeof(marker) === 'undefined') {
             marker = new L.Marker(e.latlng);
             marker.addTo(mymap);
@@ -95,11 +97,10 @@ $(document).ready(function () {
         else {
             marker.setLatLng(e.latlng);
         }
-        geocoder.reverse(e.latlng, mymap.options.crs.scale(mymap.getZoom()), function(results) {
-            var r = results[0];
-            getGeodata(r,e);
+        geocoder.reverse(e.latlng, mymap.options.crs.scale(mymap.getZoom()), (results) => {
+            let r = results[0];
+            getGeodata(r, e);
         })
     });
 
-    getCurrentDate();
 });

@@ -1,6 +1,7 @@
-$(document).ready(function () {
+$(document).ready(() => {
 
     var mymap = L.map('mapId').setView([50.15, 19.00], 13);
+    var body = $('body');
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -10,42 +11,34 @@ $(document).ready(function () {
         id: 'mapbox.streets'
     }).addTo(mymap);
 
-    var $requestGet;
-
-    var birdIcon = L.icon({
+    const birdIcon = L.icon({
         iconUrl: assetsImgDir + 'bird_marker.png',
         iconSize: [50,40]
     });
 
-    $requestGet = $.ajax({
-        url: "/api/myObservations",
-        type: "get",
-        dataType: "json"
-    });
-
-    $requestGet.done(function (response) {
+    $.get("/api/myObservations", () => {
+    }).done((response) => {
         var observationList = $('#userObservations');
 
-        $.each(response.observations, function (index, value) {
+        $.each(response.observations, (index, value) => {
             var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon}).addTo(mymap);
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
-            marker.on('mouseover', function (e) {
+            marker.on('mouseover', () => {
                 this.openPopup();
             });
-            marker.on('mouseout', function (e) {
+            marker.on('mouseout', () => {
                 this.closePopup();
             });
-            marker.on('click', function (e) {
+            marker.on('click', () => {
                 window.location.href = "/observation/" + value.id;
             });
 
             var li = $('<li class="list-group-item list-group-item-success" data-lat=' + value.latitude + ' data-lon=' + value.longitude + ' data-id=' + value.id + '>' + value.species + ', ' + value.location + ', ' + value.dateO + '</li>');
             observationList.append(li);
         });
-
     });
 
-    $('body').on('click', '.list-group-item', function () {
+    body.on('click', '.list-group-item', () => {
 
         var contentLi = '<p id="contentP"><button type="button" class="btn btn-xs btn-info" id="editBtn">Edytuj</button><button class="btn btn-xs btn-danger" id="deleteBtn" type="button">Usuń</button> </p>';
 
@@ -64,23 +57,21 @@ $(document).ready(function () {
 
     });
 
-    $('body').on('click', '#deleteBtn', function () {
-
-        var $requestDel;
+    body.on('click', '#deleteBtn', () => {
         var id = $(this).parent().parent().data("id");
 
+        var $requestDel;
         $requestDel = $.ajax({
             url: "/api/observation/" + id,
             type: "delete",
             dataType: "json"
         });
-
-        $requestDel.done(function () {
+        $requestDel.done(() => {
             window.location.href = "/userObservations";
         });
     });
 
-    $('body').on('click', '#editBtn', function () {
+    body.on('click', '#editBtn', () => {
         var id = $(this).parent().parent().data("id");
         window.location.href = "/observation/edit/" + id;
     });
