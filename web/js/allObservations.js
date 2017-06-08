@@ -14,12 +14,12 @@ $(document).ready(function () {
                 style: function (feature) {
                     var fillColor,
                         density = feature.count;
-                    if (density > 4) fillColor = "#006837";
-                    else if (density > 3) fillColor = "#31a354";
-                    else if (density > 2) fillColor = "#78c679";
-                    else if (density > 1) fillColor = "#c2e699";
+                    if (density > 11) fillColor = "#006837";
+                    else if (density > 9) fillColor = "#31a354";
+                    else if (density > 6) fillColor = "#78c679";
+                    else if (density > 3) fillColor = "#c2e699";
                     else if (density > 0) fillColor = "#ffffcc";
-                    else fillColor = "#999";  // no data
+                    else fillColor = "#999";
                     return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
                 }
             }).addTo(mymap);

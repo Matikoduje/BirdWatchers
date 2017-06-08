@@ -18,7 +18,7 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     /**
-     * @Route("/register",
+     * @Route("/register/",
      *     name="addUser")
      */
     public function createUserAction(Request $request)
@@ -57,8 +57,12 @@ class UserController extends Controller
     public function updateUserProfileAction(Request $request)
     {
         $userProfile = $this->getUser()->getUserProfile();
+        if ($userProfile->getProfilePicture() != '') {
+            $path = $userProfile->getPath().$userProfile->getProfilePicture();
+        }
         $form = $this->createForm(UserProfileType::class, $userProfile);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             if ($post->getUploadFile()) {
@@ -75,7 +79,8 @@ class UserController extends Controller
         }
 
         return $this->render('AppBundle:UserController:addUser.html.twig', array(
-            'form' => $form->createView()
+            'form' => $form->createView(),
+            'path' => $path
         ));
     }
 

@@ -5,11 +5,10 @@
 {% endblock %}
 {% block container %}
     <div class="col-lg-6 col-lg-offset-3">
+
         {{ form_start(form) }}
+        {{ form_errors(form) }}
         {{ form_widget(form) }}
         {{ form_end(form) }}
-    </div>
-    <div class="col-lg-6 col-lg-offset-3">
-        {{ form_errors(form) }}
     </div>
 {% endblock %}
