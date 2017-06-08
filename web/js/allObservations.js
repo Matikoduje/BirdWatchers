@@ -1,4 +1,4 @@
-$(document).ready(() => {
+$(document).ready(function () {
 
     var getDataColorMap = () => {
         $.getJSON(assetsBaseDir + "voivodeship.geojson", (hoodData) => {
@@ -14,18 +14,17 @@ $(document).ready(() => {
                 style: (feature) => {
                     var fillColor,
                         density = feature.count;
-                    if (density > 11) fillColor = "#006837";
-                    else if (density > 9) fillColor = "#31a354";
-                    else if (density > 6) fillColor = "#78c679";
-                    else if (density > 3) fillColor = "#c2e699";
+                    if (density > 4) fillColor = "#006837";
+                    else if (density > 3) fillColor = "#31a354";
+                    else if (density > 2) fillColor = "#78c679";
+                    else if (density > 1) fillColor = "#c2e699";
                     else if (density > 0) fillColor = "#ffffcc";
-                    else fillColor = "#999";
+                    else fillColor = "#999";  // no data
                     return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
                 }
             }).addTo(mymap);
         });
     };
-
 
     var mapBoxMap = L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,
@@ -43,10 +42,12 @@ $(document).ready(() => {
 
     var mymap = L.map('mapId', {
         layers: [mapBoxMap]
-    }).setView([50.15, 19.00], 13);
+    })
+        .setView([50.15, 19.00], 13);
 
     // do tej warstwy będą dodawane markery
     var observedMarkers = new L.LayerGroup();
+
     // warstwa odpowiedzialna za wizualną prezentację markerów
     var markerCluster = new L.markerClusterGroup();
 
@@ -77,51 +78,60 @@ $(document).ready(() => {
     var buttonMap1 = $('.leaflet-control-layers-base label:nth-child(1) input:radio');
     var buttonMap2 = $('.leaflet-control-layers-base label:nth-child(2) input:radio');
 
-    $.get("/api/observation", () => {
-    }).done((response) => {
-        $.each(response.observations, (index, value) => {
-            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
-            marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
-            marker.on('mouseover', () => {
-                this.openPopup();
-            });
-            marker.on('mouseout', () => {
-                this.closePopup();
-            });
-            marker.on('click', () => {
-                window.location.href = "/observation/" + value.id;
-            });
-            marker.addTo(observedMarkers);
-        });
-        markerCluster.addLayer(observedMarkers);
-        countsObservations = response.counts;
-    });
-
-    buttonMap1.on('change', () => {
+    buttonMap1.on('change', function () {
         if ($(this).is(':checked')) {
             geoJsonLayer.clearLayers();
         }
     });
 
-    buttonMap2.on('change', () => {
+    buttonMap2.on('change', function () {
         if ($(this).is(':checked')) {
             getDataColorMap();
         };
     });
 
-    $('#userSearch').on('click', () => {
+    var requestObservation;
+
+    requestObservation = $.ajax({
+        url: "/api/observation",
+        type: "get",
+        dataType: "json"
+    });
+
+    requestObservation.done(function (response) {
+        $.each(response.observations, function (index, value) {
+            var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
+            marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
+            marker.on('mouseover', function (e) {
+                this.openPopup();
+            });
+            marker.on('mouseout', function (e) {
+                this.closePopup();
+            });
+            marker.on('click', function (e) {
+                window.location.href = "/observation/" + value.id;
+            });
+            marker.addTo(observedMarkers);
+        });
+
+        markerCluster.addLayer(observedMarkers);
+
+        countsObservations = response.counts;
+    });
+
+    $('#userSearch').on('click', function (e) {
         if ($(this).prop('checked', true)) {
             $('#userVisible').removeClass('invisible');
         }
     });
 
-    $('#allUsers').on('click', () => {
+    $('#allUsers').on('click', function (e) {
         if ($(this).prop('checked', true)) {
             $('#userVisible').addClass('invisible');
         }
     });
 
-    $('#btnSearch').on('click', () => {
+    $('#btnSearch').on('click', function () {
         var requestSearch;
         var speciesId = $('#sel1').val();
         var timeAmount = $('#sel2').val();
@@ -133,12 +143,14 @@ $(document).ready(() => {
             loginUser = 'all';
         }
 
-        $.get("/api/searchUser",{
-            login: loginUser,
-            species: speciesId,
-            time: timeAmount
-        }, () => {
-        }).done((response) => {
+        requestSearch = $.ajax({
+            url: "/api/searchUser",
+            type: "get",
+            data: {login: loginUser, species: speciesId, time: timeAmount},
+            dataType: "json"
+        });
+
+        requestSearch.done(function (response) {
             if (response.message === 'badUser') {
                 if ($('#infoUser').hasClass('invisible')) {
                     $('#infoUser').removeClass('invisible');
@@ -151,16 +163,16 @@ $(document).ready(() => {
                 markerCluster.clearLayers();
                 observedMarkers.clearLayers();
 
-                $.each(response.observations, (index, value) => {
+                $.each(response.observations, function (index, value) {
                     var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
                     marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
-                    marker.on('mouseover', () => {
+                    marker.on('mouseover', function (e) {
                         this.openPopup();
                     });
-                    marker.on('mouseout', () => {
+                    marker.on('mouseout', function (e) {
                         this.closePopup();
                     });
-                    marker.on('click', () => {
+                    marker.on('click', function (e) {
                         window.location.href = "/observation/" + value.id;
                     });
                     marker.addTo(observedMarkers);
