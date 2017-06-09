@@ -124,10 +124,12 @@ class ObservationController extends Controller
                     foreach ($images as $image) {
                         $count++;
                     }
-                    if ($count >= 3) {
+                    if ($count > 3) {
                         return $this->render('AppBundle:WebController:editObservation.html.twig', array(
                             'form' => $form->createView(),
-                            'message' => 'Maksymalnie do obserwacji można dodać 3 zdjęcia'
+                            'message' => 'Maksymalnie do obserwacji można dodać 3 zdjęcia',
+                            'paths' => $paths,
+                            'observationId' => $id
                         ));
                     }
                     foreach ($images as $image) {
