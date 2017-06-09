@@ -33,31 +33,33 @@ $(document).ready(() => {
                 window.location.href = "/observation/" + value.id;
             });
 
-            var li = $('<li class="list-group-item list-group-item-success" data-lat=' + value.latitude + ' data-lon=' + value.longitude + ' data-id=' + value.id + '>' + value.species + ', ' + value.location + ', ' + value.dateO + '</li>');
+            var li = $('<li class="list-group-item list-group-item-default" data-lat=' + value.latitude + ' data-lon=' + value.longitude + ' data-id=' + value.id + '>' + value.species + ', ' + value.location + ', ' + value.dateO + '</li>');
             observationList.append(li);
         });
     });
 
-    body.on('click', '.list-group-item', () => {
+    body.on('click', '.list-group-item', function (e) {
 
-        var contentLi = '<p id="contentP"><button type="button" class="btn btn-xs btn-info" id="editBtn">Edytuj</button><button class="btn btn-xs btn-danger" id="deleteBtn" type="button">Usuń</button> </p>';
+        var contentLi = '<p id="contentP"><br><button type="button" class="btn btn-xs btn-default" id="editBtn">Edytuj</button> <button class="btn btn-xs btn-danger" id="deleteBtn" type="button">Usuń</button> </p>';
 
-        if ($(this).hasClass('active')) {
-            $(this).removeClass('active');
+        if ($(this).hasClass('list-group-item-success')) {
+            $(this).removeClass('list-group-item-success');
+            $(this).addClass('list-group-item-default');
             $('#contentP').remove();
         } else {
-            $('.list-group-item').removeClass('active');
+            $('.list-group-item').removeClass('list-group-item-success');
+            $('.list-group-item').addClass('list-group-item-default');
             $('#contentP').remove();
-            $(this).addClass('active');
+            $(this).addClass('list-group-item-success');
             mymap.panTo(new L.LatLng($(this).data('lat'), $(this).data('lon')));
         }
-        if ($(this).hasClass('active')) {
+        if ($(this).hasClass('list-group-item-success')) {
             $(this).append(contentLi);
         }
 
     });
 
-    body.on('click', '#deleteBtn', () => {
+    body.on('click', '#deleteBtn', function (e) {
         var id = $(this).parent().parent().data("id");
 
         var $requestDel;
@@ -71,7 +73,7 @@ $(document).ready(() => {
         });
     });
 
-    body.on('click', '#editBtn', () => {
+    body.on('click', '#editBtn', function (e) {
         var id = $(this).parent().parent().data("id");
         window.location.href = "/observation/edit/" + id;
     });

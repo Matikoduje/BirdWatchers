@@ -8,6 +8,7 @@ use AppBundle\Form\ObservationType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -101,11 +102,82 @@ class ObservationController extends Controller
         $observation = $this->getDoctrine()->getRepository('AppBundle:Observation')
             ->find($id);
         if ($observation->getUser() === $this->getUser()) {
+            $paths = array();
+            $images = $observation->getImages();
+            $count = 0;
+            foreach ($images as $image) {
+                $paths[$count]['path'] = $image->getPath() . $image->getName();
+                $paths[$count]['id'] = $image->getId();
+                $count++;
+            }
             $form = $this->createForm(ObservationType::class, $observation);
+            if ($count >= 3) {
+                $form->remove('images');
+            }
             $form->handleRequest($request);
-            return $this->render('AppBundle:WebController:add.html.twig', array(
-                'form' => $form->createView()
+            if ($form->isSubmitted() && $form->isValid()) {
+                $post = $form->getData();
+                $em = $this->getDoctrine()->getManager();
+                if ($request->files->get('observation')) {
+                    $images = $request->files->get('observation');
+                    $images = $images['images'];
+                    foreach ($images as $image) {
+                        $count++;
+                    }
+                    if ($count >= 3) {
+                        return $this->render('AppBundle:WebController:editObservation.html.twig', array(
+                            'form' => $form->createView(),
+                            'message' => 'Maksymalnie do obserwacji można dodać 3 zdjęcia'
+                        ));
+                    }
+                    foreach ($images as $image) {
+                        $picture = new Image();
+                        $picture->setSpecies($post->getSpecies());
+                        $imageName = $this->get('app.image_uploader')->upload($image);
+                        $picture->setName($imageName);
+                        $imagePath = $this->get('app.image_uploader')->getTargetDir();
+                        $picture->setPath((substr($imagePath, -11)) . '/');
+                        $picture->setObservation($post);
+                        $em->persist($picture);
+                        $post->addImage($picture);
+                    }
+                }
+                $post->setUser($this->getUser());
+                $em->persist($post);
+                $em->flush();
+                return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
+            }
+            return $this->render('AppBundle:WebController:editObservation.html.twig', array(
+                'form' => $form->createView(),
+                'paths' => $paths,
+                'observationId' => $id
             ));
         }
+    }
+
+    /**
+     * @Route("/deleteObservationPicture/{observationId}/{pictureId}", name="deleteObservationPicture")
+     */
+    public function deleteObservationPictureAction($observationId, $pictureId)
+    {
+        $userId = $this->getUser()->getId();
+        $observation = $this->getDoctrine()->getRepository('AppBundle:Observation')
+            ->find($observationId);
+        if ($userId == $observation->getUser()->getId()) {
+            $images = $observation->getImages();
+            foreach ($images as $image) {
+                $path = $image->getPath() . $image->getName();
+                $fs = new Filesystem();
+                if ($image->getId() == $pictureId && $fs->exists('uploads/images' . $path)) {
+                    $fs->remove('uploads/images' . $path);
+                    $em = $this->getDoctrine()->getManager();
+                    $em->remove($image);
+                    $em->flush();
+                }
+            }
+        }
+        return $this->redirectToRoute('editObservation', array(
+           'id' => $observationId
+        ));
     }
 }

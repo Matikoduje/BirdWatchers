@@ -171,7 +171,7 @@ class UserProfile
     /**
      * @param mixed $file
      */
-    public function setUploadFile($file = null)
+    public function setUploadFile(UploadedFile $file = null)
     {
         $this->uploadFile = $file;
     }

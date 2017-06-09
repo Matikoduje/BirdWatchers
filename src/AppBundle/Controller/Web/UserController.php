@@ -11,6 +11,7 @@ use AppBundle\Form\UserType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -57,10 +58,13 @@ class UserController extends Controller
     public function updateUserProfileAction(Request $request)
     {
         $userProfile = $this->getUser()->getUserProfile();
-        if ($userProfile->getProfilePicture() != '') {
-            $path = $userProfile->getPath().$userProfile->getProfilePicture();
-        }
         $form = $this->createForm(UserProfileType::class, $userProfile);
+        $path = '';
+        if ($userProfile->getProfilePicture() != '') {
+            $form->remove('uploadFile');
+            $path = $userProfile->getPath() . $userProfile->getProfilePicture();
+        }
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
@@ -70,12 +74,15 @@ class UserController extends Controller
                 $filename = $this->get('app.image_uploader')->upload($file);
                 $filePath = $this->get('app.image_uploader')->getTargetDir();
                 $post->setProfilePicture($filename);
-                $post->setPath((substr($filePath, -11).'/'));
+                $post->setPath((substr($filePath, -11) . '/'));
+                $post->setUploadFile(null);
             }
-            $post->setUploadFile(null);
             $em = $this->getDoctrine()->getManager();
             $em->persist($post);
             $em->flush();
+            return $this->redirectToRoute('showUser', array(
+                'login' => $this->getUser()->getLogin()
+            ));
         }
 
         return $this->render('AppBundle:UserController:addUser.html.twig', array(
@@ -119,7 +126,7 @@ class UserController extends Controller
      *     name="showUser")
      * @Security("is_granted('ROLE_USER')")
      */
-    public function showUserInformation($login)
+    public function showUserInformationAction($login)
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')
             ->findOneByLogin($login);
@@ -134,5 +141,27 @@ class UserController extends Controller
             'count' => $count,
             'path' => $user->getUserProfile()->getPath() . $user->getUserProfile()->getProfilePicture()
         ));
+    }
+
+    /**
+     * @Route("/deletePicture",
+     *     name="deletePicture")
+     * @Security("is_granted('ROLE_USER')")
+     */
+    public function deleteUserPictureAction()
+    {
+        $userProfile = $this->getUser()->getUserProfile();
+        $path = $userProfile->getPath() . $userProfile->getProfilePicture();
+        $fs = new Filesystem();
+        if ($fs->exists('uploads/images' . $path)) {
+            $fs->remove('uploads/images' . $path);
+            $userProfile->setPath('');
+            $userProfile->setProfilePicture('');
+            $em = $this->getDoctrine()->getManager();
+            $em->merge($userProfile);
+            $em->flush();
+        }
+
+        return $this->redirectToRoute('updateProfile');
     }
 }

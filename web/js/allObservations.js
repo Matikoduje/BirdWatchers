@@ -98,7 +98,7 @@ $(document).ready(function () {
         dataType: "json"
     });
 
-    requestObservation.done(function (response) {
+    requestObservation.done( (response) => {
         $.each(response.observations, function (index, value) {
             var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
@@ -150,7 +150,7 @@ $(document).ready(function () {
             dataType: "json"
         });
 
-        requestSearch.done(function (response) {
+        requestSearch.done( (response) => {
             if (response.message === 'badUser') {
                 if ($('#infoUser').hasClass('invisible')) {
                     $('#infoUser').removeClass('invisible');
@@ -163,7 +163,7 @@ $(document).ready(function () {
                 markerCluster.clearLayers();
                 observedMarkers.clearLayers();
 
-                $.each(response.observations, function (index, value) {
+                $.each(response.observations, (index, value) => {
                     var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
                     marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
                     marker.on('mouseover', function (e) {

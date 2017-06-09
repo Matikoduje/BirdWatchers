@@ -1,15 +1,5 @@
 $(document).ready(() => {
 
-    var getCurrentDate = () => {
-        let year = $('#observation_observationDate_year');
-        let month = $('#observation_observationDate_month');
-        let day = $('#observation_observationDate_day');
-
-        year.val(new Date().getFullYear());
-        month.val(new Date().getMonth() + 1);
-        day.val(new Date().getDate());
-    };
-
     var getLatitudeLongitude = (latlng) => {
         let array;
         let lat;
@@ -21,6 +11,7 @@ $(document).ready(() => {
         $('#observation_latitude').val(lat.substring(7, 15));
         $('#observation_longitude').val(lng.substring(1, 10));
     };
+
 
     var getGeodata = (result, e) => {
         let country = result.properties.country;
@@ -55,9 +46,12 @@ $(document).ready(() => {
         }
     };
 
-    getCurrentDate();
+    const birdIcon = L.icon({
+        iconUrl: assetsImgDir + 'bird_marker.png',
+        iconSize: [50,40]
+    });
 
-    var mymap = L.map('mapId').setView([50.15, 19.00], 13),
+    var mymap = L.map('mapId').setView([$('#observation_latitude').val(), $('#observation_longitude').val()], 13),
         geocoder = L.Control.Geocoder.mapzen('search-DopSHJw'),
         control = L.Control.geocoder({
             geocoder: geocoder,
@@ -65,7 +59,7 @@ $(document).ready(() => {
             placeholder: 'Wyszukaj...'
         }).addTo(mymap);
 
-    var marker;
+    var marker = L.marker([$('#observation_latitude').val(), $('#observation_longitude').val()], {icon: birdIcon}).addTo(mymap);
 
     L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
         maxZoom: 18,

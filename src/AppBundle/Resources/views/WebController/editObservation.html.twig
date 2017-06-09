@@ -1,0 +1,40 @@
+{% extends "::base.html.twig" %}
+{% form_theme form 'bootstrap_3_layout.html.twig' %}
+{% block title %}
+    Edytuj obserwację
+{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('js/editObservation.js') }}"></script>
+{% endblock %}
+{% block container %}
+    <div class="row">
+        <div class="col-lg-4">
+            <div>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+            <div>
+                {% if message is defined %}
+                    <h3 class="text-warning">{{ message }}</h3>
+                {% endif %}
+                {{ form_errors(form) }}
+            </div>
+        </div>
+        <div class="col-lg-4" id="mapId" style="height: 70vh;">
+
+        </div>
+        <div class="col-lg-4" id="images">
+            {% for path in paths %}
+                <div class="row">
+                    <div class="col-lg-6" style="height: 90px;">
+                        <img style="max-height: 90px; max-width: 110px" src= {{ asset('uploads/images' ~ path.path ~ '') }} />
+                    </div>
+                    <div>
+                        <a href="{{ path('deleteObservationPicture', {'observationId': observationId, 'pictureId': path.id}) }}" class="btn btn-default btn-xs" role="button">Usuń</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}
