@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,11 +33,13 @@ class ObservationController extends Controller
             ->find($id);
 
         if (!$observation) {
-            throw $this->createNotFoundException(sprintf(
-                'Obserwacja o id "%d" nie istnieje w bazie',
-                $id
+            return $this->render('@App/Error/error.html.twig', array(
+               'message' => sprintf(
+                   'Obserwacja o id "%d" nie istnieje w bazie',
+                   $id)
             ));
         }
+
         $data = $this->serializeObservation($observation);
         $response = new JsonResponse($data, 200);
         return $response;
@@ -94,9 +97,10 @@ class ObservationController extends Controller
             ->find($id);
 
         if (!$observation) {
-            throw $this->createNotFoundException(sprintf(
-                'Obserwacja o id "%d" nie istnieje w bazie',
-                $id
+            return $this->render('@App/Error/error.html.twig', array(
+                'message' => sprintf(
+                    'Obserwacja o id "%d" nie istnieje w bazie',
+                    $id)
             ));
         }
 

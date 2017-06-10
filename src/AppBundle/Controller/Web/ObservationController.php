@@ -101,6 +101,11 @@ class ObservationController extends Controller
     {
         $observation = $this->getDoctrine()->getRepository('AppBundle:Observation')
             ->find($id);
+        if (!$observation) {
+            return $this->render('@App/Error/error.html.twig', array(
+                'message' => 'Nie ma w bazie takiej obserwacji'
+            ));
+        }
         if ($observation->getUser() === $this->getUser()) {
             $paths = array();
             $images = $observation->getImages();
@@ -154,6 +159,10 @@ class ObservationController extends Controller
                 'paths' => $paths,
                 'observationId' => $id
             ));
+        } else {
+            return $this->render('@App/Error/error.html.twig', array(
+                'message' => 'Nie możesz edytować obserwacji której nie dodałeś'
+            ));
         }
     }
 
@@ -177,6 +186,10 @@ class ObservationController extends Controller
                     $em->flush();
                 }
             }
+        } else {
+            return $this->render('@App/Error/error.html.twig', array(
+                'message' => 'Nie możesz edytować obserwacji której nie dodałeś'
+            ));
         }
         return $this->redirectToRoute('editObservation', array(
            'id' => $observationId

@@ -130,17 +130,23 @@ class UserController extends Controller
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')
             ->findOneByLogin($login);
-        $count = $this->getDoctrine()->getRepository('AppBundle:Observation')
-            ->countUserObservations($user->getId());
-        return $this->render('AppBundle:UserController:infoUser.html.twig', array(
-            'login' => $user->getLogin(),
-            'name' => $user->getUserProfile()->getName(),
-            'surname' => $user->getUserProfile()->getSurname(),
-            'city' => $user->getUserProfile()->getCity(),
-            'state' => $user->getUserProfile()->getState()->getName(),
-            'count' => $count,
-            'path' => $user->getUserProfile()->getPath() . $user->getUserProfile()->getProfilePicture()
-        ));
+        if ($user) {
+            $count = $this->getDoctrine()->getRepository('AppBundle:Observation')
+                ->countUserObservations($user->getId());
+            return $this->render('AppBundle:UserController:infoUser.html.twig', array(
+                'login' => $user->getLogin(),
+                'name' => $user->getUserProfile()->getName(),
+                'surname' => $user->getUserProfile()->getSurname(),
+                'city' => $user->getUserProfile()->getCity(),
+                'state' => $user->getUserProfile()->getState()->getName(),
+                'count' => $count,
+                'path' => $user->getUserProfile()->getPath() . $user->getUserProfile()->getProfilePicture()
+            ));
+        } else {
+            return $this->render('@App/Error/error.html.twig', array(
+                'message' => 'Nie ma użytkownika o podanym loginie '
+            ));
+        }
     }
 
     /**
