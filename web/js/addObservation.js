@@ -23,11 +23,12 @@ $(document).ready(() => {
     };
 
     var getGeodata = (result, e) => {
-        let country = result.properties.country;
-        let locality = result.properties.locality;
-        let name = result.properties.name;
-        let state = result.properties.region;
-        let observationState = $('#observation_state option');
+
+        var country = result.properties.country;
+        var locality = result.properties.locality;
+        var name = result.properties.name;
+        var state = result.properties.region;
+        var observationState = $('#observation_state option');
 
         if (typeof(e.latlng) === 'undefined') {
             e.latlng = e.center;
@@ -45,13 +46,15 @@ $(document).ready(() => {
             } else {
                 $('#observation_location').val(name);
             }
-            $("#observation_state > option").each(() => {
-                if (this.text === 'Łódzkie' && state === 'Lódzkie') {
-                    $("#observation_state option[value=" + this.value + "]").prop('selected', true);
-                } else if (this.text === state) {
-                    $("#observation_state option[value=" + this.value + "]").prop('selected', true);
-                }
-            });
+            if (state === 'Lódzkie') {
+                observationState.filter(function (index) {
+                    return this.text === 'Łódzkie';
+                }).prop('selected', true);
+            } else {
+                observationState.filter(function (index) {
+                    return this.text === state;
+                }).prop('selected', true);
+            }
         }
     };
 
@@ -98,7 +101,7 @@ $(document).ready(() => {
             marker.setLatLng(e.latlng);
         }
         geocoder.reverse(e.latlng, mymap.options.crs.scale(mymap.getZoom()), (results) => {
-            let r = results[0];
+            var r = results[0]
             getGeodata(r, e);
         })
     });
