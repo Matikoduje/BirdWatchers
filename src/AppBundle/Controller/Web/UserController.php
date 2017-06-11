@@ -85,7 +85,7 @@ class UserController extends Controller
             ));
         }
 
-        return $this->render('AppBundle:UserController:addUser.html.twig', array(
+        return $this->render('AppBundle:UserController:updateProfile.html.twig', array(
             'form' => $form->createView(),
             'path' => $path
         ));

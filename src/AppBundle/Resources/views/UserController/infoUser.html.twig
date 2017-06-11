@@ -19,16 +19,40 @@
         </div>
         <div class="col-lg-12" style="text-align: center">
             <p>
-                <span><b>Imię:</b> {{ name }} </span>
+                <span><b>Imię:</b>
+                    {% if name is defined %}
+                    {{ name }}
+                    {% else %}
+                        brak danych
+                    {% endif %}
+                </span>
             </p>
             <p>
-                <span><b>Nazwisko:</b> {{ surname }} </span>
+                <span><b>Nazwisko:</b>
+                    {% if surname is defined %}
+                        {{ surname }}
+                    {% else %}
+                        brak danych
+                    {% endif %}
+                </span>
             </p>
             <p>
-                <span><b>Miejscowość:</b> {{ city }} </span>
+                <span><b>Miejscowość:</b>
+                    {% if city is defined %}
+                        {{ city }}
+                    {% else %}
+                        brak danych
+                    {% endif %}
+                </span>
             </p>
             <p>
-                <span><b>Województwo:</b> {{ state }} </span>
+                <span><b>Województwo:</b>
+                    {% if state is defined %}
+                        {{ state }}
+                    {% else %}
+                        brak danych
+                    {% endif %}
+                </span>
             </p>
             <p>
                 <span><b>Ilość obserwacji w serwisie:</b> {{ count }} </span>

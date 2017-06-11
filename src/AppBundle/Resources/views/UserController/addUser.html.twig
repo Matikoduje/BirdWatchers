@@ -1,20 +1,10 @@
 {% extends "::base.html.twig" %}
 {% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
 {% block title %}
-    Dane profilowe
+    Rejestracja
 {% endblock %}
 {% block container %}
-        <div class="col-lg-3">
-        {% if path != '' %}
-            <div class="col-lg-6" style="height: 90px;">
-                <img style="max-height: 90px; max-width: 110px" src= {{ asset('uploads/images' ~ path ~ '') }} />
-            </div>
-            <div>
-                <a href="{{ path('deletePicture') }}" class="btn btn-default btn-xs" role="button">Usuń</a>
-            </div>
-        {% endif %}
-        </div>
-    <div class="col-lg-6">
+    <div class="col-lg-6 col-lg-offset-3">
         {{ form_start(form) }}
         {{ form_errors(form) }}
         {{ form_widget(form) }}
