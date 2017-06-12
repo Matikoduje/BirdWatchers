@@ -1,8 +1,12 @@
 $(document).ready(function () {
 
     var getDataColorMap = () => {
+
+
         $.getJSON(assetsBaseDir + "voivodeship.geojson", (hoodData) => {
+
             var allCounts = 0;
+
             $.each(hoodData.features, (index, value) => {
                 value['count'] = 0;
                 $.each(countsObservations, (index2, value2) => {
@@ -12,6 +16,7 @@ $(document).ready(function () {
                     }
                 });
             });
+
             geoJsonLayer = L.geoJson(hoodData, {
                 style: (feature) => {
                     var fillColor;
@@ -23,8 +28,33 @@ $(document).ready(function () {
                     else if (density > 0) fillColor = "#ffffcc";
                     else fillColor = "#999";  // no data
                     return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
+                },
+                onEachFeature: (feature, layer) => {
+                    layer.on({
+                        mouseover: (e) => {
+                            var stateLayer = e.target;
+
+                            stateLayer.setStyle({
+                                weight: 2,
+                                color: '#a30028',
+                                dashArray: '',
+                                fillOpacity: 0.7
+                            });
+
+                            if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+                                stateLayer.bringToFront();
+                            }
+                        },
+                        mouseout: (e) => {
+                            geoJsonLayer.resetStyle(e.target);
+                        },
+                        click: (e) => {
+                            mymap.fitBounds(e.target.getBounds());
+                        }
+                    });
                 }
             }).addTo(mymap);
+
         });
     };
 
