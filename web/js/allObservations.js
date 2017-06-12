@@ -45,9 +45,11 @@ $(document).ready(function () {
                             if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
                                 stateLayer.bringToFront();
                             }
+                            info.update(feature);
                         },
                         mouseout: (e) => {
                             geoJsonLayer.resetStyle(e.target);
+                            info.update(0);
                         },
                         click: (e) => {
                             mymap.fitBounds(e.target.getBounds());
@@ -62,18 +64,32 @@ $(document).ready(function () {
                     labels = [];
 
                 for (let i = 0; i < grades.length; i++) {
-                    // div.innerHTML +=
-                    //     '<i style="background:' + colors[i] + '"></i> ' +
-                    //     grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
-                    div.innerHTML += '<i style="background:' + colors[i] + '"></i> ';
-                    if (grades[i] !== grades[i+1]) {
-                        div.innerHTML += grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                    // div.innerHTML += '<i style="background:' + colors[i] + '"></i> ';
+                    if (grades[i] !== grades[i + 1]) {
+                        div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' + parseInt(grades[i] + 1) + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
                     }
 
                 }
                 return div;
             };
+
             legend.addTo(mymap);
+
+            info.onAdd = () => {
+                var div = L.DomUtil.create('div', 'information info-obs');
+                div.innerHTML = '<h4>Ilość Obserwacji:</h4>';
+                return div;
+            };
+
+            info.update = (feature) => {
+                if (feature === 0) {
+                    $(".info-obs")[0].innerHTML = '<h4>Ilość Obserwacji:</h4>';
+                } else {
+                    $(".info-obs")[0].innerHTML = '<h4>Ilość Obserwacji:' + feature.count + '</h4>';
+                }
+            };
+
+            info.addTo(mymap);
         });
     };
 
@@ -111,6 +127,9 @@ $(document).ready(function () {
     // warstwa legendy
     var legend = L.control({position: 'bottomleft'});
 
+    // warstwa informacyjna
+    var info = L.control({position: 'bottomright'});
+
     var baseLayers = {
         "Mapa obserwacji": mapBoxMap,
         "Mapa deseniowa": cartoDBMap
@@ -124,7 +143,7 @@ $(document).ready(function () {
 
     const birdIcon = L.icon({
         iconUrl: assetsImgDir + 'bird_marker.png',
-        iconSize: [50,40]
+        iconSize: [50, 40]
     });
 
     var countsObservations;
@@ -135,6 +154,7 @@ $(document).ready(function () {
     buttonMap1.on('change', function () {
         if ($(this).is(':checked')) {
             mymap.removeControl(legend);
+            mymap.removeControl(info);
             geoJsonLayer.clearLayers();
         }
     });
@@ -142,7 +162,8 @@ $(document).ready(function () {
     buttonMap2.on('change', function () {
         if ($(this).is(':checked')) {
             getDataColorMap();
-        };
+        }
+        ;
     });
 
     var requestObservation;
@@ -153,7 +174,7 @@ $(document).ready(function () {
         dataType: "json"
     });
 
-    requestObservation.done( (response) => {
+    requestObservation.done((response) => {
         $.each(response.observations, function (index, value) {
             var marker = L.marker([value.latitude, value.longitude], {icon: birdIcon});
             marker.bindPopup('Gatunek: ' + value.species + '<br>Data obserwacji: ' + value.dateO);
@@ -205,7 +226,7 @@ $(document).ready(function () {
             dataType: "json"
         });
 
-        requestSearch.done( (response) => {
+        requestSearch.done((response) => {
             if (response.message === 'badUser') {
                 if ($('#infoUser').hasClass('invisible')) {
                     $('#infoUser').removeClass('invisible');
