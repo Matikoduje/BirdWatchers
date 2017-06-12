@@ -2,10 +2,11 @@ $(document).ready(function () {
 
     var getDataColorMap = () => {
 
-
         $.getJSON(assetsBaseDir + "voivodeship.geojson", (hoodData) => {
 
             var allCounts = 0;
+
+            var colors = ["#ffffcc", "#c2e699", "#78c679", "#31a354", "#006837"];
 
             $.each(hoodData.features, (index, value) => {
                 value['count'] = 0;
@@ -55,6 +56,24 @@ $(document).ready(function () {
                 }
             }).addTo(mymap);
 
+            legend.onAdd = () => {
+                var div = L.DomUtil.create('div', 'information legend'),
+                    grades = [0, parseInt(0.05 * allCounts), parseInt(0.1 * allCounts), parseInt(0.25 * allCounts), parseInt(0.51 * allCounts)],
+                    labels = [];
+
+                for (let i = 0; i < grades.length; i++) {
+                    // div.innerHTML +=
+                    //     '<i style="background:' + colors[i] + '"></i> ' +
+                    //     grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                    div.innerHTML += '<i style="background:' + colors[i] + '"></i> ';
+                    if (grades[i] !== grades[i+1]) {
+                        div.innerHTML += grades[i] + (grades[i + 1] ? '&ndash;' + grades[i + 1] + '<br>' : '+');
+                    }
+
+                }
+                return div;
+            };
+            legend.addTo(mymap);
         });
     };
 
@@ -89,6 +108,9 @@ $(document).ready(function () {
     // domyślne ustawienie wyświetlania punktów przy załadowaniu mapy
     markerCluster.addTo(mymap);
 
+    // warstwa legendy
+    var legend = L.control({position: 'bottomleft'});
+
     var baseLayers = {
         "Mapa obserwacji": mapBoxMap,
         "Mapa deseniowa": cartoDBMap
@@ -112,6 +134,7 @@ $(document).ready(function () {
 
     buttonMap1.on('change', function () {
         if ($(this).is(':checked')) {
+            mymap.removeControl(legend);
             geoJsonLayer.clearLayers();
         }
     });
@@ -191,7 +214,7 @@ $(document).ready(function () {
                 if (!$('#infoUser').hasClass('invisible')) {
                     $('#infoUser').addClass('invisible');
                 }
-                // czyścimy warstwę z uprzednio załadowanych markerów zanim dodamy następne
+                // czyścimy warstwę z uprzednio załadowanych markerów oraz usuwamy legendę zanim dodamy następne
                 markerCluster.clearLayers();
                 observedMarkers.clearLayers();
 
