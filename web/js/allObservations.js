@@ -2,22 +2,24 @@ $(document).ready(function () {
 
     var getDataColorMap = () => {
         $.getJSON(assetsBaseDir + "voivodeship.geojson", (hoodData) => {
+            var allCounts = 0;
             $.each(hoodData.features, (index, value) => {
                 value['count'] = 0;
                 $.each(countsObservations, (index2, value2) => {
                     if (value.properties.cartodb_id === value2.id) {
                         value['count'] = value2.count;
+                        allCounts += parseInt(value2.count);
                     }
                 });
             });
             geoJsonLayer = L.geoJson(hoodData, {
                 style: (feature) => {
-                    var fillColor,
-                        density = feature.count;
-                    if (density > 4) fillColor = "#006837";
-                    else if (density > 3) fillColor = "#31a354";
-                    else if (density > 2) fillColor = "#78c679";
-                    else if (density > 1) fillColor = "#c2e699";
+                    var fillColor;
+                    var density = feature.count;
+                    if (density > (0.51 * allCounts)) fillColor = "#006837";
+                    else if (density > (0.25 * allCounts)) fillColor = "#31a354";
+                    else if (density > (0.1 * allCounts)) fillColor = "#78c679";
+                    else if (density > (0.05 * allCounts)) fillColor = "#c2e699";
                     else if (density > 0) fillColor = "#ffffcc";
                     else fillColor = "#999";  // no data
                     return {color: "#999", weight: 1, fillColor: fillColor, fillOpacity: .6};
