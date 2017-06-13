@@ -1,7 +1,3 @@
-AppBundle\Entity\UserProfile:
-    userProfile0:
-    userProfile1:
-    userProfile2:
 AppBundle\Entity\State:
     state0:
         name: Śląskie
@@ -35,28 +31,64 @@ AppBundle\Entity\State:
         name: Warmińsko-mazurskie
     state15:
         name: Pomorskie
+AppBundle\Entity\UserProfile:
+    userProfile0:
+        state: '@state0'
+        name: Jan
+        surname: Kowalski
+        city: Gliwice
+        path: /fixturesUserPicture/
+        profilePicture: 1.jpg
+    userProfile1:
+        state: '@state11'
+        name: Jacek
+        surname: Soplica
+        city: Rzeszów
+        path: /fixturesUserPicture/
+        profilePicture: 1.jpg
+    userProfile2:
+        state: '@state3'
+        name: Konrad
+        surname: Walenrod
+        city: Wrocław
+        path: /fixturesUserPicture/
+        profilePicture: 1.jpg
+    userProfile3:
+        state: '@state7'
+        name: Sansa
+        surname: Stark
+        city: Łódź
+        path: /fixturesUserPicture/
+        profilePicture: 2.jpg
 AppBundle\Entity\User:
     user0:
         login: admin
-        email: admin@onet.pl
+        email: admin@onit.pl
         plainPassword: admin
         roles: ['ROLE_USER']
         is_baned: 0
         user_profile: '@userProfile0'
     user1:
-        login: admin1
-        email: admin1@onet.pl
+        login: jacekSoplica
+        email: jacekSoplica@onit.pl
         plainPassword: admin
         roles: ['ROLE_USER']
         is_baned: 0
         user_profile: '@userProfile1'
     user2:
-        login: admin2
-        email: admin2@onet.pl
+        login: konradWalenrod
+        email: konradWalenrod@onit.pl
         plainPassword: admin
         roles: ['ROLE_USER']
         is_baned: 0
         user_profile: '@userProfile2'
+    user3:
+        login: sansaStark
+        email: sansaStark@onit.pl
+        plainPassword: admin
+        roles: ['ROLE_USER']
+        is_baned: 0
+        user_profile: '@userProfile3'
 AppBundle\Entity\Species:
     species0:
         name: Bocian Bialy
@@ -100,4 +132,938 @@ AppBundle\Entity\Species:
         speciesOrder: Szponiaste (Accipitriformes)
         description: 'Długość ciała: 80-90 cm. Największy krajowy ptak drapieżny o rozpiętości skrzydeł sięgającej 240 cm. Dorosły ptak ubarwiony brunatno z rozjaśnioną głową i ramionami oraz krótkim, białym ogonem. Dziób żółty, potężny, a mocne nogi mają nieopierzone skoki. Młody jest brunatny o łaciatym upierzeniu z ciemnym dziobem i ogonem, które jaśnieją z wiekiem i osiągają ubarwienie dorosłych po 4-5 latach. Bieliki budują jedne z największych gniazd spośród wszystkich ptaków. Używane przez wiele lat gniazdo może przekraczać 2 m wysokości i osiągać ciężar nawet jednej tony. Dzięki ochronie miejsc gniazdowania bielik przestał być w naszym kraju rzadkością i jego liczebność systematycznie wzrasta.'
         mainImage: images/mainSpecies/Haliaaetus_Albicilla.jpg
-
+AppBundle\Entity\Observation:
+    observation0:
+        user: '@user0'
+        species: '@species2'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.22612
+        longitude: 22.29675
+    observation1:
+        user: '@user1'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.04121
+        longitude: 21.55518
+    observation2:
+        user: '@user0'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.08083
+        longitude: 21.35193
+    observation3:
+        user: '@user2'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.04121
+        longitude: 21.50574
+    observation4:
+        user: '@user0'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0451
+        longitude: 21.3723
+    observation5:
+        user: '@user3'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.1049
+        longitude: 21.2656
+    observation6:
+        user: '@user3'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.1048
+        longitude: 21.2656
+    observation7:
+        user: '@user3'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.1046
+        longitude: 21.2656
+    observation8:
+        user: '@user0'
+        species: '@species2'
+        state: '@state6'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.1045
+        longitude: 21.2656
+    observation9:
+        user: '@user1'
+        species: '@species3'
+        state: '@state12'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.3123
+        longitude: 23.5717
+    observation10:
+        user: '@user1'
+        species: '@species3'
+        state: '@state12'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.3945
+        longitude: 23.2058
+    observation11:
+        user: '@user1'
+        species: '@species3'
+        state: '@state12'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.4918
+        longitude: 22.3909
+    observation12:
+        user: '@user2'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0228
+        longitude: 23.4250
+    observation13:
+        user: '@user2'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.5741
+        longitude: 22.4840
+    observation14:
+        user: '@user3'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0940
+        longitude: 22.4840
+    observation15:
+        user: '@user2'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0941
+        longitude: 22.4840
+    observation16:
+        user: '@user0'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0940
+        longitude: 22.4841
+    observation17:
+        user: '@user0'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0942
+        longitude: 22.4840
+    observation18:
+        user: '@user3'
+        species: '@species3'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0940
+        longitude: 22.4839
+    observation19:
+        user: '@user3'
+        species: '@species3'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.3931
+        longitude: 21.86691
+    observation20:
+        user: '@user3'
+        species: '@species3'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0730
+        longitude: 20.3828
+    observation21:
+        user: '@user3'
+        species: '@species3'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0729
+        longitude: 20.3828
+    observation22:
+        user: '@user3'
+        species: '@species3'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0728
+        longitude: 20.3828
+    observation23:
+        user: '@user3'
+        species: '@species3'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0727
+        longitude: 20.3828
+    observation24:
+        user: '@user0'
+        species: '@species3'
+        state: '@state8'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.2413
+        longitude: 20.3052
+    observation25:
+        user: '@user0'
+        species: '@species3'
+        state: '@state0'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0431
+        longitude: 18.4716
+    observation26:
+        user: '@user0'
+        species: '@species3'
+        state: '@state0'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0431
+        longitude: 18.4714
+    observation27:
+        user: '@user0'
+        species: '@species3'
+        state: '@state2'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.35247
+        longitude: 17.91046
+    observation28:
+        user: '@user1'
+        species: '@species3'
+        state: '@state3'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.3852
+        longitude: 16.0252
+    observation29:
+        user: '@user1'
+        species: '@species3'
+        state: '@state3'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.0115
+        longitude: 16.3704
+    observation30:
+        user: '@user1'
+        species: '@species3'
+        state: '@state3'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.0115
+        longitude: 16.3705
+    observation31:
+        user: '@user1'
+        species: '@species3'
+        state: '@state3'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.3235
+        longitude: 16.4926
+    observation32:
+        user: '@user1'
+        species: '@species3'
+        state: '@state3'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.3235
+        longitude: 16.4924
+    observation33:
+        user: '@user2'
+        species: '@species3'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.98488
+        longitude: 15.72693
+    observation34:
+        user: '@user2'
+        species: '@species3'
+        state: '@state5'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0620
+        longitude: 16.2540
+    observation35:
+        user: '@user2'
+        species: '@species3'
+        state: '@state5'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0620
+        longitude: 16.2541
+    observation36:
+        user: '@user2'
+        species: '@species3'
+        state: '@state5'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0620
+        longitude: 16.2543
+    observation37:
+        user: '@user2'
+        species: '@species3'
+        state: '@state5'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0620
+        longitude: 16.2542
+    observation38:
+        user: '@user3'
+        species: '@species4'
+        state: '@state15'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 54.3537
+        longitude: 17.1408
+    observation39:
+        user: '@user3'
+        species: '@species4'
+        state: '@state14'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.4340
+        longitude: 20.3440
+    observation40:
+        user: '@user3'
+        species: '@species4'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0620
+        longitude: 16.2542
+    observation41:
+        user: '@user3'
+        species: '@species4'
+        state: '@state13'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.0340
+        longitude: 22.2203
+    observation42:
+        user: '@user3'
+        species: '@species4'
+        state: '@state12'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.0357
+        longitude: 23.1031
+    observation43:
+        user: '@user2'
+        species: '@species4'
+        state: '@state0'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.71027
+        longitude: 18.90472
+    observation44:
+        user: '@user2'
+        species: '@species4'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 50.0319
+        longitude: 19.3836
+    observation45:
+        user: '@user2'
+        species: '@species4'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.39668
+        longitude: 19.86877
+    observation46:
+        user: '@user1'
+        species: '@species4'
+        state: '@state1'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.28931
+        longitude: 19.85779
+    observation47:
+        user: '@user1'
+        species: '@species4'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.27497
+        longitude: 22.10999
+    observation48:
+        user: '@user1'
+        species: '@species4'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.36091
+        longitude: 22.45056
+    observation49:
+        user: '@user0'
+        species: '@species4'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.28931
+        longitude: 22.60437
+    observation50:
+        user: '@user0'
+        species: '@species4'
+        state: '@state11'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 49.28931
+        longitude: 22.60436
+    observation51:
+        user: '@user1'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.8266
+        longitude: 14.735211
+    observation52:
+        user: '@user1'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.272
+        longitude: 14.7353
+    observation53:
+        user: '@user1'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.27178
+        longitude: 14.735256474
+    observation54:
+        user: '@user1'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.19945
+        longitude: 14.735256476
+    observation55:
+        user: '@user2'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.998372220
+        longitude: 14.726081277
+    observation56:
+        user: '@user2'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 54.003696570
+        longitude: 14.878277521
+    observation57:
+        user: '@user2'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.914022017
+        longitude: 14.887128279
+    observation58:
+        user: '@user2'
+        species: '@species5'
+        state: '@state9'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 53.908715046
+        longitude: 14.735256476
+    observation59:
+        user: '@user3'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.76104
+        longitude: 15.30945
+    observation60:
+        user: '@user3'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.20761
+        longitude: 15.61707
+    observation61:
+        user: '@user3'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.15371
+        longitude: 15.10071
+    observation62:
+        user: '@user1'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.89683
+        longitude: 15.28748
+    observation63:
+        user: '@user2'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.72703
+        longitude: 15.33142
+    observation64:
+        user: '@user2'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.6364
+        longitude: 15.2655
+    observation65:
+        user: '@user2'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 51.98488
+        longitude: 15.7489
+    observation65:
+        user: '@user3'
+        species: '@species5'
+        state: '@state4'
+        observationDate: '<dateTimeBetween("-365 days", "now")>'
+        location: -----
+        description: -----
+        latitude: 52.71633
+        longitude: 15.45227
+AppBundle\Entity\Image:
+    image0:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation0'
+    image1:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation1'
+    image2:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation2'
+    image3:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation3'
+    image4:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation4'
+    image5:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation5'
+    image6:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation6'
+    image7:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation7'
+    image8:
+        path: /fixturesObservationPicture/
+        name: 1.jpg
+        species: '@species2'
+        observation: '@observation8'
+    image9:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation9'
+    image10:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation10'
+    image11:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation11'
+    image12:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation12'
+    image13:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation13'
+    image14:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation14'
+    image15:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation15'
+    image16:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation16'
+    image17:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation17'
+    image18:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation18'
+    image19:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation19'
+    image20:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation20'
+    image21:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation21'
+    image22:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation22'
+    image23:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation23'
+    image24:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation24'
+    image25:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation25'
+    image26:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation26'
+    image27:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation27'
+    image28:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation28'
+    image29:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation29'
+    image30:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation30'
+    image31:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation31'
+    image32:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation32'
+    image33:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation33'
+    image34:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation34'
+    image35:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation35'
+    image36:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation36'
+    image37:
+        path: /fixturesObservationPicture/
+        name: 2.jpg
+        species: '@species3'
+        observation: '@observation37'
+    image38:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation38'
+    image39:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation39'
+    image40:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation40'
+    image41:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation41'
+    image42:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation42'
+    image43:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation43'
+    image44:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation44'
+    image45:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation45'
+    image46:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation46'
+    image47:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation47'
+    image48:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation48'
+    image49:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation49'
+    image50:
+        path: /fixturesObservationPicture/
+        name: 3.jpg
+        species: '@species4'
+        observation: '@observation50'
+    image51:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation51'
+    image52:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation52'
+    image53:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation53'
+    image54:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation54'
+    image55:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation55'
+    image56:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation56'
+    image57:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation57'
+    image58:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation58'
+    image59:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation59'
+    image60:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation60'
+    image61:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation61'
+    image62:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation62'
+    image63:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation63'
+    image64:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation64'
+    image65:
+        path: /fixturesObservationPicture/
+        name: 4.jpg
+        species: '@species4'
+        observation: '@observation65'
