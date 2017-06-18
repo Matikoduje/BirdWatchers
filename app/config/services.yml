@@ -17,3 +17,4 @@ services:
     app.image_uploader:
         class: AppBundle\File\FileUploader
         arguments: ['%images_directory%']
+

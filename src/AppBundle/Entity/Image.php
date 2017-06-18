@@ -25,22 +25,6 @@ class Image
     private $createdAt;
 
     /**
-     * @return mixed
-     */
-    public function getPath()
-    {
-        return $this->path;
-    }
-
-    /**
-     * @param mixed $path
-     */
-    public function setPath($path)
-    {
-        $this->path = $path;
-    }
-
-    /**
      * @ORM\Column(type="string")
      */
     private $path;
@@ -61,6 +45,11 @@ class Image
      */
     private $species;
 
+    public function __construct()
+    {
+        $this->createdAt = new \DateTime();
+    }
+
     /**
      * @return mixed
      */
@@ -72,17 +61,25 @@ class Image
     /**
      * @return mixed
      */
-    public function getCreatedAt()
+    public function getPath()
     {
-        return $this->createdAt;
+        return $this->path;
+    }
+
+    /**
+     * @param mixed $path
+     */
+    public function setPath($path)
+    {
+        $this->path = $path;
     }
 
     /**
      * @return mixed
      */
-    public function getName()
+    public function getCreatedAt()
     {
-        return $this->name;
+        return $this->createdAt;
     }
 
     /**
@@ -94,13 +91,20 @@ class Image
     }
 
     /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
      * @param mixed $name
      */
     public function setName($name)
     {
         $this->name = $name;
     }
-
 
     /**
      * Set observation
@@ -148,10 +152,5 @@ class Image
     public function getSpecies()
     {
         return $this->species;
-    }
-
-    public function __construct()
-    {
-        $this->createdAt = new \DateTime();
     }
 }

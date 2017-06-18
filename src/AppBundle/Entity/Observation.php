@@ -2,6 +2,7 @@
 
 
 namespace AppBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -108,19 +109,13 @@ class Observation
     }
 
     /**
-     * @param mixed $observationDate
+     * Get id
+     *
+     * @return integer
      */
-    public function setObservationDate($observationDate)
+    public function getId()
     {
-        $this->observationDate = $observationDate;
-    }
-
-    /**
-     * @param mixed $location
-     */
-    public function setLocation($location)
-    {
-        $this->location = $location;
+        return $this->id;
     }
 
     /**
@@ -156,24 +151,14 @@ class Observation
     }
 
     /**
-     * @param mixed $description
-     */
-    public function setDescription($description)
-    {
-        $this->description = $description;
-    }
-
-    /**
-     * Get id
+     * Get createdAt
      *
-     * @return integer
+     * @return \DateTime
      */
-    public function getId()
+    public function getCreatedAt()
     {
-        return $this->id;
+        return $this->createdAt;
     }
-
-    /**
 
     /**
      * Set createdAt
@@ -190,16 +175,6 @@ class Observation
     }
 
     /**
-     * Get createdAt
-     *
-     * @return \DateTime
-     */
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    /**
      * Get observationDate
      *
      * @return \DateTime
@@ -207,6 +182,14 @@ class Observation
     public function getObservationDate()
     {
         return $this->observationDate;
+    }
+
+    /**
+     * @param mixed $observationDate
+     */
+    public function setObservationDate($observationDate)
+    {
+        $this->observationDate = $observationDate;
     }
 
     /**
@@ -220,6 +203,14 @@ class Observation
     }
 
     /**
+     * @param mixed $location
+     */
+    public function setLocation($location)
+    {
+        $this->location = $location;
+    }
+
+    /**
      * Get description
      *
      * @return string
@@ -227,6 +218,24 @@ class Observation
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
+    }
+
+    /**
+     * Get user
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getUser()
+    {
+        return $this->user;
     }
 
     /**
@@ -244,13 +253,13 @@ class Observation
     }
 
     /**
-     * Get user
+     * Get species
      *
-     * @return \AppBundle\Entity\User
+     * @return \AppBundle\Entity\Species
      */
-    public function getUser()
+    public function getSpecies()
     {
-        return $this->user;
+        return $this->species;
     }
 
     /**
@@ -268,13 +277,27 @@ class Observation
     }
 
     /**
-     * Get species
+     * Get state
      *
-     * @return \AppBundle\Entity\Species
+     * @return \AppBundle\Entity\State
      */
-    public function getSpecies()
+    public function getState()
     {
-        return $this->species;
+        return $this->state;
+    }
+
+    /**
+     * Set state
+     *
+     * @param \AppBundle\Entity\State $state
+     *
+     * @return Observation
+     */
+    public function setState(\AppBundle\Entity\State $state)
+    {
+        $this->state = $state;
+
+        return $this;
     }
 
     /**
@@ -309,29 +332,5 @@ class Observation
     public function getImages()
     {
         return $this->images;
-    }
-
-    /**
-     * Set state
-     *
-     * @param \AppBundle\Entity\State $state
-     *
-     * @return Observation
-     */
-    public function setState(\AppBundle\Entity\State $state)
-    {
-        $this->state = $state;
-
-        return $this;
-    }
-
-    /**
-     * Get state
-     *
-     * @return \AppBundle\Entity\State
-     */
-    public function getState()
-    {
-        return $this->state;
     }
 }

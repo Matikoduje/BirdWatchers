@@ -17,8 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ObservationController extends Controller
 {
     /**
-     * @Route("/observation",
-     *     name="map")
+     * @Route("/observation", name="map")
      */
     public function showMapAction()
     {
@@ -30,8 +29,7 @@ class ObservationController extends Controller
     }
 
     /**
-     * @Route("/observation/{id}",
-     *     name="observation")
+     * @Route("/observation/{id}", name="observation")
      */
     public function showObservationAction($id)
     {
@@ -41,14 +39,14 @@ class ObservationController extends Controller
     }
 
     /**
-     * @Route("/addObservation",
-     *     name="addMap")
+     * @Route("/addObservation", name="addMap")
      */
     public function addMapAction(Request $request)
     {
         $observation = new Observation();
         $form = $this->createForm(ObservationType::class, $observation);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             $em = $this->getDoctrine()->getManager();
@@ -80,6 +78,7 @@ class ObservationController extends Controller
             $em->flush();
             return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
         }
+
         return $this->render('AppBundle:WebController:add.html.twig', array(
             'form' => $form->createView()
         ));

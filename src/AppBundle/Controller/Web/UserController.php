@@ -19,14 +19,14 @@ use Symfony\Component\HttpFoundation\Response;
 class UserController extends Controller
 {
     /**
-     * @Route("/register/",
-     *     name="addUser")
+     * @Route("/register/", name="addUser")
      */
     public function createUserAction(Request $request)
     {
         $user = new User();
         $form = $this->createForm(UserType::class, $user);
         $form->handleRequest($request);
+
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
             $em = $this->getDoctrine()->getManager();
@@ -35,8 +35,6 @@ class UserController extends Controller
             $post->setUserProfile($userProfile);
             $em->persist($post);
             $em->flush();
-
-            // automatyczne logowanie po poprawnym zarejestrowaniu
             return $this->get('security.authentication.guard_handler')
                 ->authenticateUserAndHandleSuccess(
                     $user,
@@ -45,14 +43,14 @@ class UserController extends Controller
                     'main'
                 );
         }
+
         return $this->render('AppBundle:UserController:addUser.html.twig', array(
             'form' => $form->createView()
         ));
     }
 
     /**
-     * @Route("/updateProfile",
-     *     name="updateProfile")
+     * @Route("/updateProfile", name="updateProfile")
      * @Security("is_granted('ROLE_USER')")
      */
     public function updateUserProfileAction(Request $request)
@@ -60,6 +58,7 @@ class UserController extends Controller
         $userProfile = $this->getUser()->getUserProfile();
         $form = $this->createForm(UserProfileType::class, $userProfile);
         $path = '';
+
         if ($userProfile->getProfilePicture() != '') {
             $form->remove('uploadFile');
             $path = $userProfile->getPath() . $userProfile->getProfilePicture();
@@ -92,8 +91,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/changeUserData",
-     *     name="changeUserData")
+     * @Route("/changeUserData", name="changeUserData")
      * @Security("is_granted('ROLE_USER')")
      */
     public function changeUserInformationAction(Request $request)
@@ -103,18 +101,21 @@ class UserController extends Controller
         $formPassword = $this->createForm(ChangePasswordType::class, $user);
         $formEmail->handleRequest($request);
         $formPassword->handleRequest($request);
+
         if ($formEmail->isSubmitted() && $formEmail->isValid()) {
             $post = $formEmail->getData();
             $em = $this->getDoctrine()->getManager();
             $em->merge($post);
             $em->flush();
         }
+
         if ($formPassword->isSubmitted() && $formPassword->isValid()) {
             $post = $formPassword->getData();
             $em = $this->getDoctrine()->getManager();
             $em->merge($post);
             $em->flush();
         }
+
         return $this->render('AppBundle:UserController:changeUser.html.twig', array(
             'formEmail' => $formEmail->createView(),
             'formPassword' => $formPassword->createView()
@@ -122,25 +123,22 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/showUser/{login}",
-     *     name="showUser")
+     * @Route("/showUser/{login}", name="showUser")
      * @Security("is_granted('ROLE_USER')")
      */
     public function showUserInformationAction($login)
     {
         $user = $this->getDoctrine()->getRepository('AppBundle:User')
             ->findOneByLogin($login);
+        $userProfile = $user->getUserProfile();
+
         if ($user) {
             $count = $this->getDoctrine()->getRepository('AppBundle:Observation')
                 ->countUserObservations($user->getId());
             return $this->render('AppBundle:UserController:infoUser.html.twig', array(
                 'login' => $user->getLogin(),
-                'name' => $user->getUserProfile()->getName(),
-                'surname' => $user->getUserProfile()->getSurname(),
-                'city' => $user->getUserProfile()->getCity(),
-                'state' => $user->getUserProfile()->getState()->getName(),
-                'count' => $count,
-                'path' => $user->getUserProfile()->getPath() . $user->getUserProfile()->getProfilePicture()
+                'userProfile' => $userProfile,
+                'count' => $count
             ));
         } else {
             return $this->render('@App/Error/error.html.twig', array(
@@ -150,8 +148,7 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("/deletePicture",
-     *     name="deletePicture")
+     * @Route("/deletePicture", name="deletePicture")
      * @Security("is_granted('ROLE_USER')")
      */
     public function deleteUserPictureAction()
@@ -159,6 +156,7 @@ class UserController extends Controller
         $userProfile = $this->getUser()->getUserProfile();
         $path = $userProfile->getPath() . $userProfile->getProfilePicture();
         $fs = new Filesystem();
+
         if ($fs->exists('uploads/images' . $path)) {
             $fs->remove('uploads/images' . $path);
             $userProfile->setPath('');

@@ -8,8 +8,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 class WebController extends Controller
 {
     /**
-     * @Route("/",
-     *     name="main")
+     * @Route("/", name="main")
      */
     public function mainPageAction()
     {
@@ -17,8 +16,7 @@ class WebController extends Controller
     }
 
     /**
-     * @Route("/aboutProject",
-     *     name="project")
+     * @Route("/aboutProject", name="project")
      */
     public function aboutProjectAction()
     {

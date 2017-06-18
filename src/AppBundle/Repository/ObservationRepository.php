@@ -24,35 +24,35 @@ class ObservationRepository extends EntityRepository
 
         if ($user === 'all' && $species === 'all') {
             $q = $this->createQueryBuilder('o')
-                ->where('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time->format('Y-m-d'))
-                ->setParameter('date2', $now->format('Y-m-d'))
+                ->where('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time->format('Y-m-d'))
+                ->setParameter('dateTo', $now->format('Y-m-d'))
                 ->getQuery();
         } else if ($user !== 'all' && $species === 'all') {
             $q = $this->createQueryBuilder('o')
                 ->where('o.user = :user')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->setParameter('user', $user)
                 ->getQuery();
         } else if ($species !== 'all' && $user === 'all') {
             $q = $this->createQueryBuilder('o')
                 ->where('o.species = :species')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->setParameter('species', $species)
                 ->getQuery();
         } else {
             $q = $this->createQueryBuilder('o')
                 ->where('o.user = :user')
                 ->andWhere('o.species = :species')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
                 ->setParameter('user', $user)
                 ->setParameter('species', $species)
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->getQuery();
         }
 
@@ -66,9 +66,9 @@ class ObservationRepository extends EntityRepository
 
         if ($user === 'all' && $species === 'all') {
             $q = $this->createQueryBuilder('o')
-                ->where('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time->format('Y-m-d'))
-                ->setParameter('date2', $now->format('Y-m-d'))
+                ->where('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time->format('Y-m-d'))
+                ->setParameter('dateTo', $now->format('Y-m-d'))
                 ->select('count(o.id)')
                 ->join('o.state', 'state')
                 ->addSelect('state.name')
@@ -77,9 +77,9 @@ class ObservationRepository extends EntityRepository
         } else if ($user !== 'all' && $species === 'all') {
             $q = $this->createQueryBuilder('o')
                 ->where('o.user = :user')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->setParameter('user', $user)
                 ->select('count(o.id)')
                 ->join('o.state', 'state')
@@ -89,9 +89,9 @@ class ObservationRepository extends EntityRepository
         } else if ($species !== 'all' && $user === 'all') {
             $q = $this->createQueryBuilder('o')
                 ->where('o.species = :species')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->setParameter('species', $species)
                 ->select('count(o.id)')
                 ->join('o.state', 'state')
@@ -102,11 +102,11 @@ class ObservationRepository extends EntityRepository
             $q = $this->createQueryBuilder('o')
                 ->where('o.user = :user')
                 ->andWhere('o.species = :species')
-                ->andWhere('o.observationDate BETWEEN :date1 AND :date2')
+                ->andWhere('o.observationDate BETWEEN :dateFrom AND :dateTo')
                 ->setParameter('user', $user)
                 ->setParameter('species', $species)
-                ->setParameter('date1', $time)
-                ->setParameter('date2', $now)
+                ->setParameter('dateFrom', $time)
+                ->setParameter('dateTo', $now)
                 ->select('count(o.id)')
                 ->join('o.state', 'state')
                 ->addSelect('state.name')

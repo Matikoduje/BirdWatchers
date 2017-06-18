@@ -1,6 +1,7 @@
 <?php
 
 namespace AppBundle\Entity;
+
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -44,6 +45,27 @@ class Species
     private $family;
 
     /**
+     * @ORM\Column(type="string")
+     */
+    private $mainImage;
+
+    /**
+     * @ORM\Column(type="string")
+     */
+    private $speciesOrder;
+
+    /**
+     * @ORM\Column(type="text")
+     */
+    private $description;
+
+    public function __construct()
+    {
+        $this->observations = new ArrayCollection();
+        $this->images = new ArrayCollection();
+    }
+
+    /**
      * @return mixed
      */
     public function getMainImage()
@@ -60,21 +82,6 @@ class Species
     }
 
     /**
-     * @ORM\Column(type="string")
-     */
-    private $mainImage;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    private $speciesOrder;
-
-    /**
-     * @ORM\Column(type="text")
-     */
-    private $description;
-
-    /**
      * Get id
      *
      * @return integer
@@ -82,6 +89,16 @@ class Species
     public function getId()
     {
         return $this->id;
+    }
+
+    /**
+     * Get name
+     *
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
     }
 
     /**
@@ -96,16 +113,6 @@ class Species
         $this->name = $name;
 
         return $this;
-    }
-
-    /**
-     * Get name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->name;
     }
 
     /**
@@ -194,12 +201,6 @@ class Species
     public function getDescription()
     {
         return $this->description;
-    }
-
-    public function __construct()
-    {
-        $this->observations = new ArrayCollection();
-        $this->images = new ArrayCollection();
     }
 
     /**

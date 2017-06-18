@@ -33,6 +33,12 @@ class State
      */
     private $userProfile;
 
+    public function __construct()
+    {
+        $this->observations = new ArrayCollection();
+        $this->userProfile = new ArrayCollection();
+    }
+
     /**
      * Get id
      *
@@ -65,12 +71,6 @@ class State
     public function getName()
     {
         return $this->name;
-    }
-
-    public function __construct()
-    {
-        $this->observations = new ArrayCollection();
-        $this->userProfile = new ArrayCollection();
     }
 
     /**

@@ -21,14 +21,6 @@ class UserProfile
     private $id;
 
     /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Regex(
      *     pattern="/^[A-ZŁŚŻ][a-ząęćłśżźńó]{2,14}$/",
@@ -69,6 +61,19 @@ class UserProfile
      * @ORM\JoinColumn(nullable=true)
      */
     private $state;
+
+    /**
+     * @ORM\Column(type="string", nullable=true)
+     */
+    private $path;
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * @return mixed
@@ -191,10 +196,5 @@ class UserProfile
     {
         $this->path = $path;
     }
-
-    /**
-     * @ORM\Column(type="string", nullable=true)
-     */
-    private $path;
 
 }

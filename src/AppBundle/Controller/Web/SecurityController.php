@@ -16,11 +16,7 @@ class SecurityController extends Controller
     public function loginAction()
     {
         $authenticationUtils = $this->get('security.authentication_utils');
-
-        // jeśli będzie jakiś błąd przy autoryzacji to zapisałem go do zmiennej error
         $error = $authenticationUtils->getLastAuthenticationError();
-
-        // ostatni login wpisywany przez użytkownika
         $lastLogin = $authenticationUtils->getLastUsername();
 
         $form = $this->createForm(LoginType::class, array(
