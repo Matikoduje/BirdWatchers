@@ -18,3 +18,5 @@ services:
         class: AppBundle\File\FileUploader
         arguments: ['%images_directory%']
 
+    app.observation_serializer:
+        class: AppBundle\Services\observationService

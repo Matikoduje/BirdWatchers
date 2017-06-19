@@ -40,8 +40,8 @@ class ObservationController extends Controller
             ));
         }
 
-        $data = $this->serializeObservation($observation);
-        $response = new JsonResponse($data, 200);
+        $data = $this->get('app.observation_serializer')->serializeObservation($observation);
+        $response = new JsonResponse($data, Response::HTTP_OK);
         return $response;
     }
 
@@ -55,16 +55,9 @@ class ObservationController extends Controller
             ->getRepository('AppBundle:Observation');
         $observations = $observationRepository->findAll();
         $observationsCounts = $observationRepository->countAllObservations();
-        $data = array(
-            'observations' => array(),
-            'counts' => array());
-        foreach ($observations as $observation) {
-            $data['observations'][] = $this->serializeObservations($observation);
-        }
-        foreach ($observationsCounts as $observationCount) {
-            $data['counts'][] = $this->serializeCounts($observationCount);
-        }
-        $response = new JsonResponse($data, 200);
+        $data = $this->get('app.observation_serializer')
+            ->serializeObservationsMain($observations, $observationsCounts);
+        $response = new JsonResponse($data, Response::HTTP_OK);
         return $response;
     }
 
@@ -78,11 +71,9 @@ class ObservationController extends Controller
         $observations = $this->getDoctrine()
             ->getRepository('AppBundle:Observation')
             ->findsAllByUser($user->getId());
-        $data = array('observations' => array());
-        foreach ($observations as $observation) {
-            $data['observations'][] = $this->serializeObservations($observation);
-        }
-        $response = new JsonResponse($data, 200);
+        $data = $this->get('app.observation_serializer')
+            ->serializeObservationsMain($observations);
+        $response = new JsonResponse($data, Response::HTTP_OK);
         return $response;
     }
 
@@ -116,129 +107,7 @@ class ObservationController extends Controller
             }
         }
 
-        return new Response(null, 204);
-    }
-
-    private function serializeObservation(Observation $observation)
-    {
-        $images = $observation->getImages();
-        $imgPath = array();
-        foreach ($images as $image) {
-            $imgPath[] = $image->getPath() . $image->getName();
-        }
-        return array(
-            'longitude' => $observation->getLongitude(),
-            'latitude' => $observation->getLatitude(),
-            'description' => $observation->getDescription(),
-            'userName' => $observation->getUser()->getLogin(),
-            'dateCreate' => $observation->getCreatedAt()->format('Y-m-d'),
-            'dateO' => $observation->getObservationDate()->format('Y-m-d'),
-            'species' => $observation->getSpecies()->getName(),
-            'state' => $observation->getState()->getName(),
-            'location' => $observation->getLocation(),
-            'images' => $imgPath,
-            'speciesId' => $observation->getSpecies()->getId()
-        );
-    }
-
-    private function serializeObservations(Observation $observation)
-    {
-        return array(
-            'longitude' => $observation->getLongitude(),
-            'latitude' => $observation->getLatitude(),
-            'species' => $observation->getSpecies()->getName(),
-            'id' => $observation->getId(),
-            'dateO' => $observation->getObservationDate()->format('Y-m-d'),
-            'location' => $observation->getLocation(),
-        );
-    }
-
-
-    private function serializeCounts($observationCount)
-    {
-        switch ($observationCount['name']) {
-            case 'Małopolskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 5
-                );
-            case 'Dolnośląskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 6
-                );
-            case 'Lubelskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 7
-                );
-            case 'Opolskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 10
-                );
-            case 'Podlaskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 11
-                );
-            case 'Pomorskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 12
-                );
-            case 'Śląskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 13
-                );
-            case 'Podkarpackie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 14
-                );
-            case 'Warmińsko-mazurskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 15
-                );
-            case 'Zachodniopomorskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 16
-                );
-            case 'Świętokrzyskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 2
-                );
-            case 'Łódzkie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 1
-                );
-            case 'Wielkopolskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 3
-                );
-            case 'Kujawsko-pomorskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 4
-                );
-            case 'Lubuskie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 8
-                );
-            case 'Mazowieckie':
-                return array(
-                    'count' => $observationCount['1'],
-                    'id' => 9
-                );
-        }
-
+        return new Response(null, Response::HTTP_NO_CONTENT);
     }
 
     /**
@@ -252,7 +121,6 @@ class ObservationController extends Controller
         $species = $request->query->get('species');
         $time = $request->query->get('time');
         $isUserExist = false;
-
         $repositoryUser = $this->getDoctrine()->getRepository('AppBundle:User');
         $repositoryObservation = $this->getDoctrine()->getRepository('AppBundle:Observation');
         $repositorySpecies = $this->getDoctrine()->getRepository('AppBundle:Species');
@@ -278,17 +146,11 @@ class ObservationController extends Controller
         if ($isUserExist) {
             $observations = $repositoryObservation->findByParameters($user, $species, $time);
             $observationsCounts = $repositoryObservation->countFindByParameters($user, $species, $time);
-            $data = array(
-                'observations' => array(),
-                'counts' => array());
-            foreach ($observations as $observation) {
-                $data['observations'][] = $this->serializeObservations($observation);
-            }
-            foreach ($observationsCounts as $observationCount) {
-                $data['counts'][] = $this->serializeCounts($observationCount);
-            }
+            $data = $this->get('app.observation_serializer')
+                ->serializeObservationsMain($observations, $observationsCounts);
         }
-        $response = new JsonResponse($data, 200);
+
+        $response = new JsonResponse($data, Response::HTTP_OK);
         return $response;
 
     }
