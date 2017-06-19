@@ -9,6 +9,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -49,34 +50,15 @@ class ObservationController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $post = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $images = $request->files->get('observation');
-            $images = $images['images'];
-            $countImages = 0;
-            foreach ($images as $image) {
-                $countImages++;
-            }
-            if ($countImages > 3) {
+            $result = $this->handleForm($request, $post);
+            if (!$result) {
                 return $this->render('AppBundle:WebController:add.html.twig', array(
                     'form' => $form->createView(),
                     'message' => 'Maksymalnie za jednym razem można dodać tylko 3 zdjęcia'
                 ));
+            } else {
+                return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
             }
-            foreach ($images as $image) {
-                $picture = new Image();
-                $picture->setSpecies($post->getSpecies());
-                $imageName = $this->get('app.image_uploader')->upload($image);
-                $picture->setName($imageName);
-                $imagePath = $this->get('app.image_uploader')->getTargetDir();
-                $picture->setPath((substr($imagePath,-11)) . '/');
-                $picture->setObservation($post);
-                $em->persist($picture);
-                $post->addImage($picture);
-            }
-            $post->setUser($this->getUser());
-            $em->persist($post);
-            $em->flush();
-            return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
         }
 
         return $this->render('AppBundle:WebController:add.html.twig', array(
@@ -115,43 +97,32 @@ class ObservationController extends Controller
                 $count++;
             }
             $form = $this->createForm(ObservationType::class, $observation);
+            $imageField = $form->get('images');
+            $saveField = $form->get('save');
+            $options = $imageField->getConfig()->getOptions();
+            $options['required'] = false;
+            $form->remove('images');
+            $form->remove('save');
+            $form->add('images', FileType::class, $options);
+            $form->add($saveField);
+
             if ($count >= 3) {
                 $form->remove('images');
             }
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $post = $form->getData();
-                $em = $this->getDoctrine()->getManager();
-                if ($request->files->get('observation')) {
-                    $images = $request->files->get('observation');
-                    $images = $images['images'];
-                    foreach ($images as $image) {
-                        $count++;
-                    }
-                    if ($count > 3) {
-                        return $this->render('AppBundle:WebController:editObservation.html.twig', array(
-                            'form' => $form->createView(),
-                            'message' => 'Maksymalnie do obserwacji można dodać 3 zdjęcia',
-                            'paths' => $paths,
-                            'observationId' => $id
-                        ));
-                    }
-                    foreach ($images as $image) {
-                        $picture = new Image();
-                        $picture->setSpecies($post->getSpecies());
-                        $imageName = $this->get('app.image_uploader')->upload($image);
-                        $picture->setName($imageName);
-                        $imagePath = $this->get('app.image_uploader')->getTargetDir();
-                        $picture->setPath((substr($imagePath, -11)) . '/');
-                        $picture->setObservation($post);
-                        $em->persist($picture);
-                        $post->addImage($picture);
-                    }
+                $result = $this->handleForm($request, $post, false);
+                if (!$result) {
+                    return $this->render('AppBundle:WebController:editObservation.html.twig', array(
+                        'form' => $form->createView(),
+                        'message' => 'Maksymalnie do obserwacji można dodać 3 zdjęcia',
+                        'paths' => $paths,
+                        'observationId' => $id
+                    ));
+                } else {
+                    return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
                 }
-                $post->setUser($this->getUser());
-                $em->persist($post);
-                $em->flush();
-                return $this->redirect($this->generateUrl('observation', array('id' => $post->getId())));
             }
             return $this->render('AppBundle:WebController:editObservation.html.twig', array(
                 'form' => $form->createView(),
@@ -194,4 +165,36 @@ class ObservationController extends Controller
            'id' => $observationId
         ));
     }
+
+    public function handleForm(Request $request, $post, $new = true)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $images = $request->files->get('observation');
+        if ($new == true || ($new == false && $images['images'][0] != null)) {
+            $images = $images['images'];
+            $countImages = 0;
+            foreach ($images as $image) {
+                $countImages++;
+            }
+            if ($countImages > 3) {
+                return false;
+            }
+            foreach ($images as $image) {
+                $picture = new Image();
+                $picture->setSpecies($post->getSpecies());
+                $imageName = $this->get('app.image_uploader')->upload($image);
+                $picture->setName($imageName);
+                $imagePath = $this->get('app.image_uploader')->getTargetDir();
+                $picture->setPath((substr($imagePath,-11)) . '/');
+                $picture->setObservation($post);
+                $em->persist($picture);
+                $post->addImage($picture);
+            }
+        }
+        $post->setUser($this->getUser());
+        $em->persist($post);
+        $em->flush();
+        return true;
+    }
+
 }
